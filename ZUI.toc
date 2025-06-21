@@ -1,0 +1,17 @@
+## Interface: 40400
+## Title: |cff66ccffZUI|r
+## Notes: A clean, focused UI enhancement addon for World of Warcraft.
+## Author: Snugglelumps
+## Version: 1.0
+## SavedVariables: ZUISettings
+
+init.lua
+anchors.lua
+
+settings.lua
+
+addons/minimap.lua
+addons/blizzard.lua
+addons/details.lua
+addons/chat.lua
+addons/tabwords.lua

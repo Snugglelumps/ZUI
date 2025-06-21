@@ -1,0 +1,179 @@
+--------------------------------------------------------------------------
+---- Details! Integration (Conditional Based on Anchor Assignment)
+--------------------------------------------------------------------------
+--local function ShouldAnchorDetails()
+--    return ZUISettings
+--        and ZUISettings.anchorAssignments
+--        and (
+--            ZUISettings.anchorAssignments.left == "Details!"
+--            or ZUISettings.anchorAssignments.right == "Details!"
+--        )
+--end
+--
+--local function GetDetailsAnchorTarget()
+--    if ZUISettings.anchorAssignments.left == "Details!" then
+--        return leftAnchor
+--    elseif ZUISettings.anchorAssignments.right == "Details!" then
+--        return rightAnchor
+--    end
+--end
+--
+--local function AnchorDetailsToAssignedAnchor()
+--    if not (Details and Details.GetInstance and ShouldAnchorDetails()) then return end
+--    local instance = Details:GetInstance(1)
+--    if not (instance and instance.baseframe) then return end
+--
+--    local targetAnchor = GetDetailsAnchorTarget()
+--    if not targetAnchor then return end
+--
+--    local frame = instance.baseframe
+--    frame:ClearAllPoints()
+--    frame:SetPoint("TOPLEFT", targetAnchor, "TOPLEFT", 0, 0)
+--    frame:SetPoint("BOTTOMRIGHT", targetAnchor, "BOTTOMRIGHT", 0, 0)
+--    frame:SetSize(targetAnchor:GetWidth(), targetAnchor:GetHeight())
+--end
+--
+--local function ApplyDetailsVisualSettings()
+--    if not (Details and Details.GetInstance and ZUISettings) then return end
+--    local instance = Details:GetInstance(1)
+--    if not instance or not instance.baseframe then return end
+--
+--    if ZUISettings.LockDetails then
+--        instance:LockInstance(true)
+--    end
+--
+--    if ZUISettings.HideDetailsTitleBar then
+--        if instance and instance.color then
+--            instance.color[4] = 0  -- Set alpha to 0
+--        end
+--    end
+--
+--    if ZUISettings.HideDetailsBarArea then
+--        if DetailsBaseFrame1 and DetailsBaseFrame1.Center then
+--            DetailsBaseFrame1.Center:SetAlpha(0)
+--        end
+--        if Details_GumpFrame1 and Details_GumpFrame1.Center then
+--            Details_GumpFrame1.Center:SetAlpha(0)
+--        end
+--    end
+--    instance:SaveMainWindowPosition()
+--end
+--
+--
+--
+--
+--
+--
+---- Init on login
+--local detailsEventFrame = CreateFrame("Frame")
+--detailsEventFrame:RegisterEvent("PLAYER_LOGIN")
+--detailsEventFrame:SetScript("OnEvent", function()
+--    C_Timer.After(0.1, function()
+--        AnchorDetailsToAssignedAnchor()
+--        ApplyDetailsVisualSettings()
+--
+--        -- Hook resize
+--        local anchor = GetDetailsAnchorTarget()
+--        if anchor and not anchor.__details_size_hooked then
+--            anchor:HookScript("OnSizeChanged", AnchorDetailsToAssignedAnchor)
+--            anchor.__details_size_hooked = true
+--        end
+--    end)
+--end)
+--
+---- Refresh when settings UI is shown
+--if ZUISettingsFrame then
+--    ZUISettingsFrame:HookScript("OnShow", function()
+--        AnchorDetailsToAssignedAnchor()
+--    end)
+--end
+
+--------------------------------------------------------------------------
+---- Blizzard Chat + Prat 3.0
+--------------------------------------------------------------------------
+-----Position
+--local f = CreateFrame("Frame")
+--f:RegisterEvent("PLAYER_LOGIN")
+--f:SetScript("OnEvent", function()
+--    C_Timer.After(0.1, function()
+--        if leftAnchor and ChatFrame1 then
+--            -- Position the Chat Frame
+--            ChatFrame1:ClearAllPoints()
+--            ChatFrame1:SetPoint("TOPLEFT", leftAnchor, "TOPLEFT", 2, -2)
+--            ChatFrame1:SetPoint("BOTTOMRIGHT", leftAnchor, "BOTTOMRIGHT", -2, 2)
+--        else
+--            print("ChatFrame1 or leftAnchor not found")
+--        end
+--
+--        local editBox = ChatFrame1EditBox
+--        if editBox and leftAnchor then
+--            -- Conditional offset if Prat is loaded
+--            local offsetY = IsAddOnLoaded("Prat-3.0") and 2 or 6
+--
+--            -- Position the Chat Edit Box
+--            editBox:ClearAllPoints()
+--            editBox:SetPoint("BOTTOMLEFT", leftAnchor, "TOPLEFT", 0, offsetY)
+--            editBox:SetPoint("BOTTOMRIGHT", leftAnchor, "TOPRIGHT", 0, offsetY)
+--            editBox:SetHeight(20)
+--            editBox:SetWidth(leftAnchor:GetWidth())
+--        else
+--            print("ChatFrame1EditBox or leftAnchor not found")
+--        end
+--    end)
+--end)
+--
+--local function HideBlizzardChatTabs()
+--    for i = 1, NUM_CHAT_WINDOWS do
+--        local tab = _G["ChatFrame"..i.."Tab"]
+--        if tab then
+--            tab:SetAlpha(0) -- Hides the tab by setting alpha. Do not hide() tabs, they are needed to generate tabwords
+--            tab:EnableMouse(false)
+--            hooksecurefunc(tab, "Show", function(self)
+--                self:SetAlpha(0)
+--                self:EnableMouse(false)
+--            end)
+--            hooksecurefunc(tab, "SetAlpha", function(self, a)
+--                if a > 0 then self:SetAlpha(0) end
+--            end)
+--        end
+--    end
+--end
+--
+--local function HideChatButtons()
+--    for i = 1, NUM_CHAT_WINDOWS do
+--        local frame = _G["ChatFrame"..i]
+--        if frame then
+--            local up = _G[frame:GetName().."ButtonFrameUpButton"]
+--            local down = _G[frame:GetName().."ButtonFrameDownButton"]
+--            local bottom = _G[frame:GetName().."ButtonFrameBottomButton"]
+--            local chatMenu = _G[frame:GetName().."ButtonFrameMinimizeButton"]
+--            if up then up:Hide() end
+--            if down then down:Hide() end
+--            if bottom then bottom:Hide() end
+--            if chatMenu then chatMenu:Hide() end
+--        end
+--    end
+--end
+---- PLAYER_LOGIN: Setup visual tweaks
+--local f = CreateFrame("Frame")
+--f:RegisterEvent("PLAYER_LOGIN")
+--f:SetScript("OnEvent", function()
+--    C_Timer.After(0.5, function()
+--        HideChatButtons()
+--        HideBlizzardChatTabs()
+--    end)
+--end)
+
+--------------------------------------------------------------------------------------------------------------------------
+----- ZUICommitRegistry Function Registration
+--------------------------------------------------------------------------------------------------------------------------
+--local f = CreateFrame("Frame")
+--f:RegisterEvent("PLAYER_LOGIN")
+--f:SetScript("OnEvent", function()
+--    -- Ensure the commit registry exists
+--    ZUICommitRegistry = ZUICommitRegistry or {}
+--
+--    -- Register the Details! settings callback
+--    table.insert(ZUICommitRegistry, AnchorDetailsToAssignedAnchor)
+--    table.insert(ZUICommitRegistry, ApplyDetailsVisualSettings)
+--end)
