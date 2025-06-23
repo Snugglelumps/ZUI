@@ -157,7 +157,6 @@ label:SetText("ZUI Settings")
 local ZUISLeft = CreateFrame("Frame", nil, ZUISettingsFrame, "BackdropTemplate")
 ZUISLeft:SetSize(200, 358)
 ZUISLeft:SetPoint("TOPLEFT", ZUISettingsFrame, "TOPLEFT", 8, -20)
-
 ZUISLeft:SetBackdrop({
     bgFile = "Interface/Tooltips/UI-Tooltip-Background",
     edgeFile = "Interface/DialogFrame/UI-DialogBox-Border",
@@ -203,13 +202,12 @@ closeButton:SetPoint("BOTTOMRIGHT", -10, 10)
 closeButton:SetText("Close")
 closeButton:SetScript("OnClick", function()
     ZUISettingsFrame:Hide()
-    ZUISettingsFrame_old:Hide() ----remove
 end)
 
--- ScrollFrame inside content
-local scrollFrame = CreateFrame("ScrollFrame", nil, ZUISRight, "UIPanelScrollFrameTemplate")
-scrollFrame:SetPoint("TOPLEFT", ZUISRight, "TOPLEFT", 0, -8)
-scrollFrame:SetPoint("BOTTOMRIGHT", ZUISRight, "BOTTOMRIGHT", -28, 8)
+---- ScrollFrame inside content
+--local scrollFrame = CreateFrame("ScrollFrame", nil, ZUISRight, "UIPanelScrollFrameTemplate")
+--scrollFrame:SetPoint("TOPLEFT", ZUISRight, "TOPLEFT", 0, -8)
+--scrollFrame:SetPoint("BOTTOMRIGHT", ZUISRight, "BOTTOMRIGHT", -28, 8)
 ------------------------------------------------------------------------------------------------------------------------
 --- END ZUI Settings Frame
 ------------------------------------------------------------------------------------------------------------------------
@@ -230,6 +228,17 @@ ZUISRight_ProfilesPanel = CreateFrame("Frame", "ZUISRight_ProfilesPanel", ZUISRi
 ZUISRight_ProfilesPanel:SetAllPoints()
 ZUISRight_ProfilesPanel:Hide()
 
+ZUIProfiles_DetailsPanel = CreateFrame("Frame", "ZUIProfiles_DetailsPanel", ZUISRight)
+ZUIProfiles_DetailsPanel:SetAllPoints()
+ZUIProfiles_DetailsPanel:Hide()
+
+ZUIProfiles_PratPanel = CreateFrame("Frame", "ZUIProfiles_PratPanel", ZUISRight)
+ZUIProfiles_PratPanel:SetAllPoints()
+ZUIProfiles_PratPanel:Hide()
+
+ZUIProfiles_MasquePanel = CreateFrame("Frame", "ZUIProfiles_MasquePanel", ZUISRight)
+ZUIProfiles_MasquePanel:SetAllPoints()
+ZUIProfiles_MasquePanel:Hide()
 
 local sidebarLabels = { "About", "General", "Chat", "Profiles" }
 local sidebarButtons = {}
@@ -258,13 +267,18 @@ local function ToggleSubButtons()
 end
 
 local function ShowPanel(name)
-    -- Hide all known panels
+    -- Hide all main panels
     ZUISRight_AboutPanel:Hide()
     ZUISRight_GeneralPanel:Hide()
     ZUISRight_ChatPanel:Hide()
     ZUISRight_ProfilesPanel:Hide()
 
-    -- Show selected one
+    -- Hide all sub-panels too
+    ZUIProfiles_DetailsPanel:Hide()
+    ZUIProfiles_PratPanel:Hide()
+    ZUIProfiles_MasquePanel:Hide()
+
+    -- Show selected
     if name == "About" then
         ZUISRight_AboutPanel:Show()
     elseif name == "General" then
@@ -273,8 +287,18 @@ local function ShowPanel(name)
         ZUISRight_ChatPanel:Show()
     elseif name == "Profiles" then
         ZUISRight_ProfilesPanel:Show()
+    elseif name == "Details!" then
+        --ZUISRight_ProfilesPanel:Show()
+        ZUIProfiles_DetailsPanel:Show()
+    elseif name == "Prat 3.0" then
+        --ZUISRight_ProfilesPanel:Show()
+        ZUIProfiles_PratPanel:Show()
+    elseif name == "Masque" then
+        --ZUISRight_ProfilesPanel:Show()
+        ZUIProfiles_MasquePanel:Show()
     end
 end
+
 
 for _, label in ipairs(sidebarLabels) do
     local btn = CreateFrame("Button", nil, ZUISLeft)
@@ -335,7 +359,7 @@ end
 
 -- Sub-buttons under "Profiles"
 local subLabels = { "Details!", "Prat 3.0", "Masque" }
-for i, label in ipairs(subLabels) do
+for _, label in ipairs(subLabels) do
     local btn = CreateFrame("Button", nil, ZUISLeft)
     btn:SetSize(160, 22)
     btn:SetPoint("TOPLEFT", 20, currentYOffset)
@@ -347,20 +371,21 @@ for i, label in ipairs(subLabels) do
     highlight:SetTexture("interface/garrison/garrisonmissionui1")
     highlight:SetTexCoord(0.001953125, 0.783203125, 0.6513671875, 0.7001953125)
     highlight:SetAlpha(0.8)
-
     highlight:Hide()
     btn.highlight = highlight
 
     -- Label
     local text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     text:SetPoint("LEFT", btn, "LEFT", 8, 0)
-    text:SetText("• " .. label)
+    text:SetText(label)
+    --text:SetTextColor(1, 1, 1, 1)
     btn.text = text
 
     btn:SetScript("OnClick", function()
         ClearSidebarHighlights()
         btn.highlight:Show()
         print("ZUI Sub clicked:", label)
+        ShowPanel(label)
     end)
 
     btn:SetScript("OnEnter", function()
@@ -526,7 +551,115 @@ local text = ZUISRight_ProfilesPanel:CreateFontString(nil, "OVERLAY", "GameFontN
 text:SetPoint("TOPLEFT", 16, -16)
 text:SetText("General Tab")
 
+                                                    --------------------------------------------------------------------
+                                                    --- Profiles Sub Panels
+                                                    --------------------------------------------------------------------
 
+
+local text = ZUIProfiles_DetailsPanel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+text:SetPoint("TOPLEFT", 16, -16)
+text:SetText("Use the string below to import the ZUI profile for Details!")
+local scrollFrame = CreateFrame("ScrollFrame", nil, ZUIProfiles_DetailsPanel, "UIPanelScrollFrameTemplate")
+scrollFrame:SetPoint("TOPLEFT", 16, -48)
+scrollFrame:SetPoint("BOTTOMRIGHT", -32, 16) -- leave room for scrollbar
+local scrollFrameBackground = CreateFrame("ScrollFrame", nil, scrollFrame, "BackdropTemplate")
+scrollFrameBackground:SetPoint("TOPLEFT", -4, 4)
+scrollFrameBackground:SetPoint("BOTTOMRIGHT", 4, -4)
+scrollFrameBackground:SetBackdrop({
+    bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+    edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+    tile = true,
+    tileSize = 16,
+    edgeSize = 12,
+    insets = { left = 2, right = 2, top = 2, bottom = 2 }
+})
+scrollFrameBackground:SetBackdropColor(0, 0, 0, 0.4)
+scrollFrameBackground:SetBackdropBorderColor(1, 1, 1, 0.6) -- white border
+
+local exportBox = CreateFrame("EditBox", nil, scrollFrame)
+exportBox:SetMultiLine(true)
+exportBox:SetFontObject("GameFontHighlightSmall")
+exportBox:SetWidth(400) -- will auto-expand height
+exportBox:SetAutoFocus(false)
+exportBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+exportBox:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
+exportBox:SetScript("OnTextChanged", function(self)
+    scrollFrame:UpdateScrollChildRect()
+end)
+
+scrollFrame:SetScrollChild(exportBox)
+exportBox:SetText(Details_Profile or "No export data found.")
+
+
+
+local text = ZUIProfiles_PratPanel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+text:SetPoint("TOPLEFT", 16, -16)
+text:SetText("Use the string below to import the ZUI profile for Prat 3.0:")
+local scrollFrame = CreateFrame("ScrollFrame", nil, ZUIProfiles_PratPanel, "UIPanelScrollFrameTemplate")
+scrollFrame:SetPoint("TOPLEFT", 16, -48)
+scrollFrame:SetPoint("BOTTOMRIGHT", -32, 16) -- leave room for scrollbar
+local scrollFrameBackground = CreateFrame("ScrollFrame", nil, scrollFrame, "BackdropTemplate")
+scrollFrameBackground:SetPoint("TOPLEFT", -4, 4)
+scrollFrameBackground:SetPoint("BOTTOMRIGHT", 4, -4)
+scrollFrameBackground:SetBackdrop({
+    bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+    edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+    tile = true,
+    tileSize = 16,
+    edgeSize = 12,
+    insets = { left = 2, right = 2, top = 2, bottom = 2 }
+})
+scrollFrameBackground:SetBackdropColor(0, 0, 0, 0.4)
+scrollFrameBackground:SetBackdropBorderColor(1, 1, 1, 0.6) -- white border
+
+local exportBox = CreateFrame("EditBox", nil, scrollFrame)
+exportBox:SetMultiLine(true)
+exportBox:SetFontObject("GameFontHighlightSmall")
+exportBox:SetWidth(400) -- will auto-expand height
+exportBox:SetAutoFocus(false)
+exportBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+exportBox:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
+exportBox:SetScript("OnTextChanged", function(self)
+    scrollFrame:UpdateScrollChildRect()
+end)
+
+scrollFrame:SetScrollChild(exportBox)
+exportBox:SetText(Prat_Profile or "No export data found.")
+
+
+local text = ZUIProfiles_MasquePanel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+text:SetPoint("TOPLEFT", 16, -16)
+text:SetText("Use the string below to import the ZUI profile for Masque")
+local scrollFrame = CreateFrame("ScrollFrame", nil, ZUIProfiles_MasquePanel, "UIPanelScrollFrameTemplate")
+scrollFrame:SetPoint("TOPLEFT", 16, -48)
+scrollFrame:SetPoint("BOTTOMRIGHT", -32, 16) -- leave room for scrollbar
+local scrollFrameBackground = CreateFrame("ScrollFrame", nil, scrollFrame, "BackdropTemplate")
+scrollFrameBackground:SetPoint("TOPLEFT", -4, 4)
+scrollFrameBackground:SetPoint("BOTTOMRIGHT", 4, -4)
+scrollFrameBackground:SetBackdrop({
+    bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+    edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+    tile = true,
+    tileSize = 16,
+    edgeSize = 12,
+    insets = { left = 2, right = 2, top = 2, bottom = 2 }
+})
+scrollFrameBackground:SetBackdropColor(0, 0, 0, 0.4)
+scrollFrameBackground:SetBackdropBorderColor(1, 1, 1, 0.6) -- white border
+
+local exportBox = CreateFrame("EditBox", nil, scrollFrame)
+exportBox:SetMultiLine(true)
+exportBox:SetFontObject("GameFontHighlightSmall")
+exportBox:SetWidth(400) -- will auto-expand height
+exportBox:SetAutoFocus(false)
+exportBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+exportBox:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
+exportBox:SetScript("OnTextChanged", function(self)
+    scrollFrame:UpdateScrollChildRect()
+end)
+
+scrollFrame:SetScrollChild(exportBox)
+exportBox:SetText(Masque_Profile or "No export data found.")
 
 
 -- Auto-open on login if Debug is enabled
@@ -535,7 +668,6 @@ debugFrame:RegisterEvent("PLAYER_LOGIN")
 debugFrame:SetScript("OnEvent", function()
     C_Timer.After(0.1, function()
         if ZUISettings and ZUISettings.DebugMode then
-            --ZUISettingsFrame_old:Show()
             ZUISettingsFrame:Show()
         end
     end)

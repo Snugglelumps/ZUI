@@ -5,10 +5,11 @@
 ## Version: 1.0
 ## SavedVariables: ZUISettings
 
-init.lua
-anchors.lua
+core/init.lua
+core/anchors.lua
 
-settings.lua
+core/profiles.lua
+core/settings.lua
 
 addons/minimap.lua
 addons/blizzard.lua
