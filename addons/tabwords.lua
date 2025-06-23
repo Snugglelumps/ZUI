@@ -18,9 +18,13 @@ local function anchorTabWords()
         end
 end
 
--- Dev-only: semi-transparent black background for visual debug
-TabWordsFrame:SetBackdrop({ bgFile = "Interface/Tooltips/UI-Tooltip-Background" })
-TabWordsFrame:SetBackdropColor(0, 0, 0, 0) -- change here for alpha
+-- Dev-only: semi-transparent black background for visual dev
+local function debugFrame_TabWords()
+    if ZUISettings.DebugMode then
+        TabWordsFrame:SetBackdrop({ bgFile = "Interface/Tooltips/UI-Tooltip-Background" })
+        TabWordsFrame:SetBackdropColor(0, 0, 0, .5) -- change here for alpha
+    end
+end
 
 -- Table to store button references for tab words
 local tabWordButtons = {}
@@ -139,6 +143,7 @@ l:SetScript("OnEvent", function()
     anchorTabWords()
     RefreshTabWords()
     initTabWords()
+    debugFrame_TabWords()
 end)
 
 ------------------------------------------------------------------------------------------------------------------------
