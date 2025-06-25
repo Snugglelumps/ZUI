@@ -354,7 +354,6 @@ for _, label in ipairs(sidebarLabels) do
 
     sidebarButtons[label] = btn
     currentYOffset = currentYOffset + spacing
-
 end
 
 -- Sub-buttons under "Profiles"

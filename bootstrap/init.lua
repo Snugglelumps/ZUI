@@ -1,7 +1,6 @@
 ZUISettings = ZUISettings or {}
 ZUICommitRegistry = ZUICommitRegistry or {}
 
-
 ZUISettings.anchorAssignments = ZUISettings.anchorAssignments or {}
 ZUISettings.anchorAssignments.left = ZUISettings.anchorAssignments.left
 ZUISettings.anchorAssignments.right = ZUISettings.anchorAssignments.right
@@ -38,17 +37,7 @@ C_Timer.After(0, function()
     end
 end)
 
---local f = CreateFrame("Frame")
--- f:RegisterEvent("PLAYER_LOGIN")
--- f:SetScript("OnEvent", function()
---    -- Ensure ZUISettings exists
---    ZUISettings = ZUISettings or {}
---
---    -- Static visual overrides for integrated addons
---    ZUISettings.HideDetailsTitleBar = true
---    ZUISettings.HideDetailsBarArea  = true
---    ZUISettings.LockDetails         = true
---end)
+
 
 --fairly certain I didn't need an init.lua, it was just easier to build things out with this, I might integrate it later
 --I just wanted it for settings, but because wow is wow and loading takes time I have to wrap everything in some kind of
