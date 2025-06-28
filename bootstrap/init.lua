@@ -1,5 +1,10 @@
 ZUISettings = ZUISettings or {}
-ZUICommitRegistry = ZUICommitRegistry or {}
+zui.settings = ZUISettings
+
+zui.frames         = zui.frames or {}
+zui.panels         = zui.panels or {}
+zui.buttons        = zui.buttons or {}
+zui.commitRegistry = zui.commitRegistry or {}
 
 ZUISettings.anchorAssignments = ZUISettings.anchorAssignments or {}
 ZUISettings.anchorAssignments.left = ZUISettings.anchorAssignments.left
