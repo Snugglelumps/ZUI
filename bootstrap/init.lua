@@ -1,3 +1,5 @@
+local _, zui = ...
+
 ZUISettings = ZUISettings or {}
 zui.settings = ZUISettings
 
@@ -6,44 +8,55 @@ zui.panels         = zui.panels or {}
 zui.buttons        = zui.buttons or {}
 zui.commitRegistry = zui.commitRegistry or {}
 
-ZUISettings.anchorAssignments = ZUISettings.anchorAssignments or {}
-ZUISettings.anchorAssignments.left = ZUISettings.anchorAssignments.left
-ZUISettings.anchorAssignments.right = ZUISettings.anchorAssignments.right
+zui.settings.anchorAssignments = zui.settings.anchorAssignments or {}
 
-ZUISettings.leftAnchorWidth = ZUISettings.leftAnchorWidth
-ZUISettings.leftAnchorHeight = ZUISettings.leftAnchorHeight
+function zui.assertSettings()
+    local defaults = {
+        anchorAssignments = {
+            left  = "Chat",
+            right = "Details!",
+        },
+        anchorWidth  = 420,
+        anchorHeight = 200,
+        tabSystem = "ZUI",
+        minimapStyle = "ZUI",
+    }
 
-ZUISettings.DebugMode = ZUISettings.DebugMode
+    local function applyDefaults(target, source)
+        for key, value in pairs(source) do
+            if type(value) == "table" then
+                if type(target[key]) ~= "table" then
+                    target[key] = {}
+                end
+                applyDefaults(target[key], value)
+            elseif target[key] == nil then
+                target[key] = value
+            end
+        end
+    end
+    applyDefaults(zui.settings, defaults)
+end
 
 local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function()
-    -- ✅ Enable debug mode manually
-    ZUISettings.DebugMode = true
+f:RegisterEvent("ADDON_LOADED")
+f:SetScript("OnEvent", function(self, event, name)
+    if name ~= "ZUI" then return end -- replace with your actual folder/addon name
+    ZUISettings = ZUISettings or {}
+    zui.settings = ZUISettings
+    zui.assertSettings()
+    if zui.settings.reloadUI then
+        zui.settings.reloadUI = false
+    end
+    zui.settings.debug = false
 end)
 
-C_Timer.After(0, function()
-    if ZUISettings and ZUISettings.DebugMode then
-        print("Init Loaded")
-        print("ZUISettings contents at init.lua load:")
-        for k, v in pairs(ZUISettings or {}) do
-            print("  ", k, "=", tostring(v))
-        end
-    print("ZUI Debug: Registered ZUICommitRegistry functions:")
-    if type(ZUICommitRegistry) == "table" then
-        for i, fn in ipairs(ZUICommitRegistry) do
-            print(string.format("  [%d] %s", i, tostring(fn)))
-        end
-    else
-        print("  ZUICommitRegistry not initialized or not a table.")
-    end
-       print("Left Anchor Assignment:", ZUISettings.anchorAssignments.left)
-       print("Right Anchor Assignment:", ZUISettings.anchorAssignments.right)
-    end
-end)
-
-
-
---fairly certain I didn't need an init.lua, it was just easier to build things out with this, I might integrate it later
---I just wanted it for settings, but because wow is wow and loading takes time I have to wrap everything in some kind of
---event, so its like... why even bother doing things cleanly
+function zui.loginTrigger(callback)
+    local f = CreateFrame("Frame")
+    f:RegisterEvent("PLAYER_LOGIN")
+    f:SetScript("OnEvent", function(self)
+        zui.commitRegistry = zui.commitRegistry or {}
+        callback()
+        self:UnregisterAllEvents()
+        self:SetScript("OnEvent", nil)
+    end)
+end

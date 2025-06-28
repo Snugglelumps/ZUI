@@ -8,7 +8,6 @@
 bootstrap/init.lua
 resources/profiles.lua
 
-bootstrap/anchors.lua
 bootstrap/frames.lua
 core.lua
 

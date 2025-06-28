@@ -1,15 +1,7 @@
--- Minimap Customization Addon
+local _, zui = ...
 
-local eventFrame = CreateFrame("Frame")
-eventFrame:RegisterEvent("PLAYER_LOGIN")
-eventFrame:SetScript("OnEvent", function()
-    ------------------------------------------------------------------------
-    -- Minimap Appearance
-    ------------------------------------------------------------------------
-    -- Make the minimap square
+local function ZUIMinimap()
     Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8x8")
-
-    -- Scale up the minimap
     Minimap:SetScale(1.40625)
 
     -- Add a 1px black border around the minimap
@@ -17,7 +9,7 @@ eventFrame:SetScript("OnEvent", function()
     border:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -0.5, 0.5)
     border:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 0.5, -0.5)
     border:SetBackdrop({
-        edgeFile = "Interface\\Buttons\\WHITE8x8", -- That is the name of the texture, not a color, color is changed elsewhere
+        edgeFile = "Interface\\Buttons\\WHITE8x8",
         edgeSize = 0.5,
     })
     border:SetBackdropBorderColor(0, 0, 0, 1)
@@ -71,9 +63,17 @@ eventFrame:SetScript("OnEvent", function()
         -- Lock MiniMapTrackingIcon to magnifying glass (file ID 136460)
         if MiniMapTrackingIcon then
             MiniMapTrackingIcon:SetTexture(136460)
-            hooksecurefunc(MiniMapTrackingIcon, "SetTexture", function(self)
-                self:SetTexture(136460)
+            do
+            local inHook = false
+            hooksecurefunc(MiniMapTrackingIcon, "SetTexture", function(self, texture)
+                if inHook then return end  -- Prevent recursion
+                if texture ~= 136460 then
+                    inHook = true
+                    self:SetTexture(136460)
+                    inHook = false
+                end
             end)
+            end
         end
     end
 
@@ -105,4 +105,76 @@ eventFrame:SetScript("OnEvent", function()
         else
         end
     end)
+end
+local function blizzardMinimap()
+    Minimap:SetMaskTexture("interface\\masks\\circlemaskscalable")
+    Minimap:SetScale(1)
+
+    for _, name in ipairs({
+        "MinimapBorder",
+        "MinimapBorderTop",
+        "MinimapZoneTextButton",
+        "MinimapZoneText",
+        "MinimapZoomIn",
+        "MinimapZoomOut",
+        "MiniMapTrackingButtonBorder",
+        "MiniMapTrackingBackground",
+    }) do
+        local f = _G[name]
+        if f and f.Show then f:Show() end
+    end
+
+    if _G["MiniMapWorldMapButton"] then
+        _G["MiniMapWorldMapButton"]:Show()
+    end
+
+    MinimapCluster:ClearAllPoints()
+    MinimapCluster:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -17, -4)
+
+    if GameTimeFrame then
+        GameTimeFrame:ClearAllPoints()
+        GameTimeFrame:SetPoint("TOPRIGHT", MinimapCluster, "TOPRIGHT", 0, 0)
+    end
+
+    if MiniMapTracking then
+        MiniMapTracking:ClearAllPoints()
+        MiniMapTracking:SetPoint("BOTTOMRIGHT", MinimapCluster, "BOTTOMRIGHT", 0, 0)
+    end
+
+    if TimeManagerClockButton then
+        TimeManagerClockButton:ClearAllPoints()
+        TimeManagerClockButton:SetPoint("BOTTOMLEFT", MinimapCluster, "BOTTOMLEFT", 0, 0)
+        TimeManagerClockTicker:SetScale(1)
+    end
+
+    if WatchFrame then
+        WatchFrame:ClearAllPoints()
+        WatchFrame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -200, -100)
+        WatchFrame:SetClampedToScreen(true)
+        WatchFrame:SetMovable(false)
+    end
+
+end
+
+local function applyMinimapStyle()
+    local style = zui.settings.minimapStyle
+    if style == "ZUI" then
+        ZUIMinimap()
+    elseif style == "Blizzard" then
+        Minimap:SetMaskTexture("interface\\masks\\circlemaskscalable")
+        Minimap:SetScale(1)
+        --blizzardMinimap()
+    end
+
+end
+---<<===================================================================================================== init on login
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_LOGIN")
+f:SetScript("OnEvent", function()
+    applyMinimapStyle()
+end)
+
+---<<========================================================================== zui.commitRegistry Function Registration
+zui.loginTrigger(function()
+        --table.insert(zui.commitRegistry, applyMinimapStyle)
 end)

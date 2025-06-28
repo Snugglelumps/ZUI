@@ -90,4 +90,4 @@ ZUI is a statement — not a toolkit.
 You can enable debug mode manually inside init.lua:
 
 ```lua
-ZUISettings.DebugMode = true
+zui.settings.debug = true

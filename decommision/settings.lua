@@ -666,7 +666,7 @@ local debugFrame = CreateFrame("Frame")
 debugFrame:RegisterEvent("PLAYER_LOGIN")
 debugFrame:SetScript("OnEvent", function()
     C_Timer.After(0.1, function()
-        if ZUISettings and ZUISettings.DebugMode then
+        if zui.settings and zui.settings.debug then
             ZUISettingsFrame:Show()
         end
     end)
