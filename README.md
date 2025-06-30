@@ -1,20 +1,20 @@
-# ZUI
+# ZUI+
 
 _A clean, focused UI enhancement addon for World of Warcraft._
 
 ## ✨ Intent
 
-> ZUI is built on the idea that a unified, end-to-end UI should be clean, efficient, and visually cohesive — not a patchwork of mismatched styles. While many UI overhauls are impressively comprehensive, they can be overwhelming to configure and maintain. ZUI aims to do less, better.
+> ZUI+ is built on the idea that a unified, end-to-end UI should be clean, efficient, and visually cohesive — not a patchwork of mismatched styles. While many UI overhauls are impressively comprehensive, they can be overwhelming to configure and maintain. ZUI+ aims to do less, better.
 > 
-> The goal is simplicity with intention. ZUI strives for minimal overhead and maximum clarity. Even as we add creature comforts like user settings, the addon will always prioritize performance and visual harmony.
+> The goal is simplicity with intention. ZUI+ strives for minimal overhead and maximum clarity. Even as we add creature comforts like user settings, the addon will always prioritize performance and visual harmony.
 > 
-> And while we could offer full customization, ZUI follows a focused aesthetic — one that I personally enjoy. I know that's a little opinionated, but I hope you'll like it too.
+> And while we could offer full customization, ZUI+ follows a focused aesthetic — one that I personally enjoy. I know that's a little opinionated, but I hope you'll like it too.
 
 
 
-### What ZUI Covers
+### What ZUI+ Covers
 
-**ZUI** is intentionally minimal and only customizes a few core interface elements. It is designed to interface with:
+**ZUI+** is intentionally minimal and only customizes a few core interface elements. It is designed to interface with:
 
   - [****Prat 3.0****](https://www.curseforge.com/wow/addons/prat-3-0) by [sylvanaar](https://github.com/sylvanaar)
   - [****Details! Damage Meter****](https://www.curseforge.com/wow/addons/details) by [Tercioo](https://github.com/Tercioo)
@@ -24,7 +24,7 @@ It does *not* modify action bars, unit frames, or other general UI components. T
 * [**Shadowed Unit Frames**](https://www.curseforge.com/wow/addons/shadowed-unit-frames) by [Shadowed103](https://github.com/Shadowed)
 * [**Bartender4**](https://www.curseforge.com/wow/addons/bartender4) by [nevcairiel](https://github.com/Nevcairiel) and [Contributors](https://github.com/Nevcairiel/Bartender4/graphs/contributors)
 * [**Masque**](https://www.curseforge.com/wow/addons/masque) by [StormFX](https://github.com/SFX-WoW) – [Credits](https://github.com/SFX-WoW/Masque?tab=readme-ov-file#Top)
-* **Masque: ZUI** -- *Coming Soon*
+* **Masque: ZUI+** -- *Coming Soon*
 
 
 Special Thanks:
@@ -45,7 +45,7 @@ Special Thanks:
 
 - **Details! Integration**:
   - Snaps Details! to the right anchor (if selected).
-  - Applies styling (e.g. hides title bar, bar area, locks position).
+  - Optional Details! import profile.
   - Responsively resizes to match the anchor.
 
 - **Chat Tab Restyling**:
@@ -59,7 +59,7 @@ Special Thanks:
 
 ## 🧩 Compatibility
 
-**ZUI** is fully compatible with **WoW Classic: Cataclysm** and will continue to receive support and updates for **WoW Classic: Mists of Pandaria** upon its release.
+**ZUI+** is fully compatible with **WoW Classic: Cataclysm** and will continue to receive support and updates for **WoW Classic: Mists of Pandaria** upon its release.
 
 We aim to maintain seamless integration with relevant addons across Classic expansions.
 
@@ -68,10 +68,10 @@ We aim to maintain seamless integration with relevant addons across Classic expa
 ## 📦 Installation
 
 1. Download or clone the addon into your `Interface/AddOns/` directory.
-2. Folder must be named: `ZUI`
+2. Folder must be named: `ZUI+`
 3. Use `/zui` in game to open the settings panel.
 
-- Very shortly ZUI and Masque_ZUI will be on CurseForge
+- Very shortly ZUI+ and Masque_ZUI+ will be on CurseForge
 
 ---
 
@@ -80,7 +80,7 @@ We aim to maintain seamless integration with relevant addons across Classic expa
 You can enable debug mode manually inside init.lua:
 
 ```lua
-zui.settings.debug = true
+ZUI+.settings.debug = true
  ```
  
 ## 📁 Index
