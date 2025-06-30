@@ -1,5 +1,5 @@
 ## Interface: 40400
-## Title: |cff66ccffZUI|r
+## Title: |cff66ccffSnugUI|r
 ## Notes: A clean, focused UI enhancement addon for World of Warcraft.
 ## Author: Snugglelumps
 ## Version: 1.0

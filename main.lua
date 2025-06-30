@@ -238,8 +238,8 @@ local function setDetailsExportBox()
     exportBox:SetText(Details_Profile or "No export data found.")
 end
 ---<======================================================================================>---<<3.7 Buttons and Commands
-SLASH_ZUI1 = "/zui"
-SlashCmdList["ZUI"] = function()
+SLASH_SnugUI1 = "/sui"
+SlashCmdList["SnugUI"] = function()
     if zui.frames.BG:IsShown() then
         zui.frames.BG:Hide()
     else
@@ -288,7 +288,7 @@ local function CreateAboutLine(text, font, anchorTo, offsetX, offsetY)
 end
 
 -- Title
-local title = CreateAboutLine("About ZUI", "GameFontNormalLarge", nil, 16, -16)
+local title = CreateAboutLine("About SnugUI", "GameFontNormalLarge", nil, 16, -16)
 
 local missionStatement = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 missionStatement:SetPoint("TOPLEFT", 16, -32)
@@ -296,7 +296,7 @@ missionStatement:SetWidth(440) -- or however wide your about panel is
 missionStatement:SetJustifyH("LEFT")
 missionStatement:SetJustifyV("TOP")
 missionStatement:SetTextColor(1, 1, 1)
-missionStatement:SetText("ZUI is a lightweight UI style that brings everything together with minimal fuss. It aims to unify your interface visually while staying out of the way, using clean, efficient tweaks to keep things cohesive without overcomplicating.")
+missionStatement:SetText("SnugUI is a lightweight UI style that brings everything together with minimal fuss. It aims to unify your interface visually while staying out of the way, using clean, efficient tweaks to keep things cohesive without overcomplicating.")
 
 local recAddons = CreateAboutLine("Recommended", "GameFontNormal", nil, 32, -96)
 local recAddons = CreateAboutLine("Addons", "GameFontNormal", nil, 75, -112)
@@ -325,7 +325,7 @@ local function CreateThanksEntry(parent, x, y, name, author, url)
 end
 
 CreateThanksEntry(panel, 148, -96, "Masque", "StormFX", "https://www.curseforge.com/wow/addons/masque")
-CreateThanksEntry(panel, 148, -128, "Masque_ZUI", "Snugglelumps", "https://www.curseforge.com/wow/addons/masque_zui")
+CreateThanksEntry(panel, 148, -128, "Masque_SnugUI", "Snugglelumps", "https://www.curseforge.com/wow/addons/masque_zui")
 CreateThanksEntry(panel, 148, -160, "Details! Damage Meter", "Tercioo", "https://www.curseforge.com/wow/addons/details")
 CreateThanksEntry(panel, 148, -192, "Prat 3.0", "sylvanaar", "https://www.curseforge.com/wow/addons/prat-3-0")
 

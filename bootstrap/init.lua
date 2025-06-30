@@ -39,12 +39,12 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function(_, _, name)
-    if name ~= "ZUI" then return end
+    if name ~= "SnugUI" then return end
     ZUISettings = ZUISettings or {}
     zui.settings = ZUISettings
     zui.assertSettings()
     if zui.settings.reloadUI then zui.settings.reloadUI = false end
-    zui.settings.debug = false
+    zui.settings.debug = true
 end)
 
 local loginQueue = {}
