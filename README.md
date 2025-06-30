@@ -4,17 +4,20 @@ _A clean, focused UI enhancement addon for World of Warcraft._
 
 ## ✨ Intent
 
-> “This addon reflects my personal aesthetic and workflow preferences. It’s not trying to be everything to everyone — just a clean, focused experience that works great out of the box.”
+> ZUI is built on the idea that a unified, end-to-end UI should be clean, efficient, and visually cohesive — not a patchwork of mismatched styles. While many UI overhauls are impressively comprehensive, they can be overwhelming to configure and maintain. ZUI aims to do less, better.
+> 
+> The goal is simplicity with intention. ZUI strives for minimal overhead and maximum clarity. Even as we add creature comforts like user settings, the addon will always prioritize performance and visual harmony.
+> 
+> And while we could offer full customization, ZUI follows a focused aesthetic — one that I personally enjoy. I know that's a little opinionated, but I hope you'll like it too.
 
-ZUI aims to improve positioning, visual clarity, and addon integration without becoming bloated or overly configurable.
+
 
 ### What ZUI Covers
 
-**ZUI** is intentionally minimal and only customizes a few core interface elements:
+**ZUI** is intentionally minimal and only customizes a few core interface elements. It is designed to interface with:
 
-* **Chat Frame / Prat 3.0**
-* **Details!**
-* **Minimap**
+  - [****Prat 3.0****](https://www.curseforge.com/wow/addons/prat-3-0) by [sylvanaar](https://github.com/sylvanaar)
+  - [****Details! Damage Meter****](https://www.curseforge.com/wow/addons/details) by [Tercioo](https://github.com/Tercioo)
 
 It does *not* modify action bars, unit frames, or other general UI components. These are already masterfully handled by other authors. For those, I personally recommend the following:
 
@@ -24,9 +27,9 @@ It does *not* modify action bars, unit frames, or other general UI components. T
 * **Masque: ZUI** -- *Coming Soon*
 
 
-Other recommended addons:
-  - [****Prat 3.0****](https://www.curseforge.com/wow/addons/prat-3-0) by [sylvanaar](https://github.com/sylvanaar)
-  - [****Details!****](https://www.curseforge.com/wow/addons/details) by [Tercioo](https://github.com/Tercioo)
+Special Thanks:
+  - [****DevTool****](https://www.curseforge.com/wow/addons/devtool) by [brittyazel](https://github.com/brittyazel)
+  - [****TextureAtlasViewer****](https://www.curseforge.com/wow/addons/textureatlasviewer) by [LanceDH](https://github.com/LanceDH)
 
 ---
 ## 🔧 Features
@@ -46,8 +49,7 @@ Other recommended addons:
   - Responsively resizes to match the anchor.
 
 - **Chat Tab Restyling**:
-  - Removes Blizzard's default tab textures.
-  - Replaces them with slim, inline text labels next to the chat frame.
+  - Choose between Blizzards old clunky tabs or the new clunky ones I wrote.
 
 - **Minimap Tweaks**:
   - Recenters and declutters the minimap.
@@ -63,25 +65,13 @@ We aim to maintain seamless integration with relevant addons across Classic expa
 
 ---
 
-## ⚠️ Philosophy
-
-ZUI isn’t trying to be a universal solution.
-
-This addon is for players who already know what they want:
-- Clean structure
-- Sharp edges
-- No bloat
-
-No drag-to-resize, no popup menus, no profiles.  
-ZUI is a statement — not a toolkit.
-
----
-
 ## 📦 Installation
 
 1. Download or clone the addon into your `Interface/AddOns/` directory.
 2. Folder must be named: `ZUI`
 3. Use `/zui` in game to open the settings panel.
+
+- Very shortly ZUI and Masque_ZUI will be on CurseForge
 
 ---
 
@@ -91,3 +81,26 @@ You can enable debug mode manually inside init.lua:
 
 ```lua
 zui.settings.debug = true
+ ```
+ 
+## 📁 Index
+
+### 1.0: Initialization (`init.lua`)
+
+### 2.0: UI Base Frame (`frames.lua`)
+- 2.1: Anchors  
+- 2.2: Layout  
+- 2.3: Predeclare  
+- 2.4: Sidebar  
+- 2.5: Border  
+- 2.6: Labels  
+
+### 3.0: Main Logic and Panel Content (`main.lua`)
+- 3.1: Reload Indicator  
+- 3.2: Anchor Dimensions  
+- 3.3: Anchor Assignments  
+- 3.4: Minimap Settings  
+- 3.5: Chat Settings  
+- 3.6: Details! Panel  
+- 3.7: Buttons and Commands  
+- 3.8: About Page

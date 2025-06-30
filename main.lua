@@ -365,49 +365,6 @@ thankyou:SetJustifyV("TOP")
 thankyou:SetTextColor(1, 1, 1)
 thankyou:SetText("And a general thanks to all of you who take the time to build something for the game you love (and leave helpful comments). This is the first time I have tried anything like this, without the vast endeavors of this community I would not have made it very far. --|cff00ccffSnugglelumps|r")
 
-
----- Version & Dependencies
---local version = CreateAboutLine("|cffffff00Version:|r 1.0.0", nil, philosophy, 0, -24)
---local deps = CreateAboutLine("|cffffff00Dependencies:|r SharedMedia, Masque, Details!", nil, version, 0, -16)
---
----- Recommended Addons (example with CF & GitHub links)
---local recHeader = CreateAboutLine("|cffffff00Recommended Addons:|r", "GameFontNormal", deps, 0, -24)
---local rec1 = CreateAboutLine("|cff00ccff• Masque|r - https://www.curseforge.com/wow/addons/masque", nil, recHeader, 8, -16)
---local rec1Author = CreateAboutLine("  Author: https://github.com/SFX-WoW", nil, rec1, 0, -14)
---
----- Thanks
---local thanksHeader = CreateAboutLine("|cffffff00Thanks To:|r", "GameFontNormal", rec1Author, 0, -24)
---local thanks1 = CreateAboutLine("|cff00ccff• SharedMedia|r - https://www.curseforge.com/wow/addons/sharedmedia", nil, thanksHeader, 8, -16)
---
----- GitHub
---local git = CreateAboutLine("|cffffff00GitHub:|r https://github.com/yourname/zui", nil, thanks1, 0, -24)
-
---local aboutBox = CreateFrame("EditBox", nil, zui.panels.about)
---aboutBox:SetMultiLine(true)
---aboutBox:SetAutoFocus(false)
---aboutBox:SetFontObject("GameFontHighlightSmall")
---aboutBox:SetSize(400, 200)
---aboutBox:SetPoint("TOPLEFT", zui.panels.about, "TOPLEFT", 16, -32)
---aboutBox:SetJustifyH("LEFT")
---aboutBox:SetJustifyV("TOP")
---aboutBox:EnableMouse(true)
---aboutBox:SetScript("OnEscapePressed", aboutBox.ClearFocus)
---aboutBox:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
---
----- Optional: subtle backdrop for readability
-----aboutBox:SetBackdrop({
-----    bgFile = "Interface/Tooltips/UI-Tooltip-Background",
-----    edgeFile = nil,
-----    tile = true, tileSize = 16,
-----    insets = { left = 4, right = 4, top = 4, bottom = 4 }
-----})
-----aboutBox:SetBackdropColor(0, 0, 0, 0.4)
---
----- Sample content
---aboutBox:SetText("https://www.curseforge.com/wow/addons/masque")
-
-
-
 ---<===========================================================================================================>---<<AUX
 zui.loginTrigger(function()
     -- Initialization
