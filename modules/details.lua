@@ -1,8 +1,6 @@
 local _, zui = ...
 
-
----<<=======================================================================================═╗ Details! anchor logic╔═==
-local function GetAnchorTarget()                                                          ---╚═====================═╝---
+local function GetAnchorTarget()
     local asgn = zui.settings.anchorAssignments
     if not asgn then return nil end
 
@@ -14,7 +12,7 @@ local function GetAnchorTarget()                                                
 end
 
 local function AnchorDetailsToAssignedAnchor()
-    if not (Details and Details.GetInstance) then return end
+    if not Details or not Details.GetInstance then return end
     local instance = Details:GetInstance(1)
     if not (instance and instance.baseframe) then return end
 
@@ -25,27 +23,22 @@ local function AnchorDetailsToAssignedAnchor()
     frame:ClearAllPoints()
     frame:SetPoint("TOPLEFT", targetAnchor, "TOPLEFT", 1, -1)
     frame:SetPoint("BOTTOMRIGHT", targetAnchor, "BOTTOMRIGHT", -1, 1)
-    frame:SetSize(targetAnchor:GetWidth(), targetAnchor:GetHeight())
     if instance then
         instance:LockInstance(true)
     end
 end
 
-
----<<===================================================================================================== init on login
+---<===========================================================================================================>---<<AUX
 zui.loginTrigger(function()
+    -- Initialization
     AnchorDetailsToAssignedAnchor()
 
-    -- Hook resize
+    -- Hooks
     local anchor = GetAnchorTarget()
     if anchor and not anchor.care then
         anchor:HookScript("OnSizeChanged", AnchorDetailsToAssignedAnchor)
         anchor.care = true
     end
-end)
-
-
----<<========================================================================== zui.commitRegistry Function Registration
-zui.loginTrigger(function()
-        table.insert(zui.commitRegistry, AnchorDetailsToAssignedAnchor)
+    -- Commit Registry
+    table.insert(zui.commitRegistry, AnchorDetailsToAssignedAnchor)
 end)

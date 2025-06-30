@@ -1,42 +1,32 @@
+
+
+
 # ZUI Addon Changelog  
 _Last updated: 2025-06-28_
+___
+## 1. Initial system created  
+This is the phase where I build stuff, hate it, and rebuild it. There is way too much to enumerate, here are the highlights.
 
-### 1. Initial anchor system created  
-Introduced `leftAnchor` and `rightAnchor` frames with borders and background textures.
+#### 1.1 Proof of concept for minimap formatting
 
-### 2. Anchor assignment UI  
-Implemented dropdowns to select 'Chat' or 'Details!' content for each anchor, with mutual exclusivity.
+#### 1.2 Proof of concept for making pretty rectangles, ended up changing the scope of the project adding this idea of "anchors." Not an original idea I know lol.
 
-### 3. Tab system toggle  
-Added setting to switch between 'Blizzard' and 'ZUI' chat tab styles, including conditional logic for toggling and persisting.
+#### 1.3 Anchored the chat frame to one side, and details to the other
+* Struggled to get the frames to anchor when I wanted, made a debug ui so I could change the anchor dims on the fly
 
-### 4. Details anchoring  
-Integrated logic to hook `OnSizeChanged` and re-anchor the Details! window dynamically.
+#### 1.4 Added a settings panel, basically the first full rewrite
 
-### 5. Improved tab styling  
-Modified Blizzard tab textures and fonts; introduced logic to hide default tab artwork.
+#### 1.5 Learned what namespaces were, basically another full rewrite
+* Then I learned that I was leaving rogue frames and exposed globals literally everywhere, more rewrite...
+* I also finally established a scheme initialization via triggers, `ADDON_LOADED == "ZUI"` for settings, `PLAYER_LOGIN` for everything else.
 
-### 6. Global exposure of anchor frames  
-Assigned `ZUI_LeftAnchor` and `ZUI_RightAnchor` to `_G` for WeakAuras compatibility.
+#### 1.6 Looked into the minimap formatting so it can be toggled. 
+* It cant, not really. I wanted to avoid /reload, but you cant unhook a function, so /reload it is
 
-### 7. ZUI settings persistence fix  
-Moved `zui.assertSettings()` to an `ADDON_LOADED` event with addon name check, fixing issues where defaults overwrote user settings.
+#### 1.7 COMMENTS, so many comments. Also made `INDEX.md`
 
-### 8. ReloadUI indicator  
-Added visual reload notice on settings that require it, such as minimap and tab system changes.
 
-### 9. Settings UI modularization  
-Wrapped all dropdown setups in `PLAYER_LOGIN` event blocks to ensure SavedVariables are loaded.
-
-### 10. Minimap styling  
-Implemented logic to reposition and lock `MiniMapTrackingIcon` texture. Addressed recursive `SetTexture` issue.
-
-### 11. WeakAuras frame selection  
-Enabled click-through behavior on anchor frames while still allowing UI interaction.
-
-### 12. **Global Exposure Removed; Unified Initialization Timing**
-* **Replaced** all prior global frame exposure with explicit namespace references under `zui.frames`, `zui.panels`, etc., for clarity and encapsulation.
-* **Global frame exposure** (e.g., `_G["ZUI_LeftAnchor"]`) was phased out unless absolutely necessary (e.g., WeakAuras compatibility), and such exposure is now explicitly handled where needed.
-* **Standardized settings assertion** to fire on the `ADDON_LOADED` event scoped to `ZUI`, ensuring SavedVariables are available before defaults are asserted.
-* **All other module logic** and UI setup now consistently runs inside `PLAYER_LOGIN` handlers, resolving numerous timing conflicts and improving startup reliability.
-
+___
+## 2. ZUI Launched
+* Disabled debug, and removed erroneous debugging lines
+* Reformatted file structure in preparation for direct to distributor pipeline

@@ -1,8 +1,7 @@
 local _, zui = ...
 
-
----<<=======================================================================═╗ Blizzard Chat + Prat 3.0 anchor logic╔═==
-local function GetAnchorTarget()                                          ---╚═=========++++++++++++++++===========═╝---
+-- Determines the anchor target for the chat frame, or nil
+local function GetAnchorTarget()
     local asgn = zui.settings.anchorAssignments
     if not asgn then return nil end
 
@@ -13,7 +12,8 @@ local function GetAnchorTarget()                                          ---╚
     return nil
 end
 
-local function AnchorChatToAssignedAnchor() -- Anchors the chat frame and its edit box to the selected anchor
+-- Anchors the chat frame and its edit box to the selected anchor
+local function AnchorChatToAssignedAnchor()
     local anchor = GetAnchorTarget()
     if anchor and ChatFrame1 and ChatFrame1EditBox then
         -- Chat frame
@@ -35,7 +35,6 @@ local function AnchorChatToAssignedAnchor() -- Anchors the chat frame and its ed
         editBox:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, offsetY)
         editBox:SetPoint("BOTTOMRIGHT", anchor, "TOPRIGHT", 0, offsetY)
         editBox:SetHeight(20)
-        editBox:SetWidth(anchor:GetWidth())
     elseif zui.settings.debug then
         print("ZUI Chat: Failed to anchor. Missing anchor or ChatFrame1.")
     end
@@ -48,21 +47,19 @@ local function HideChatButtons()
             local up = _G[frame:GetName().."ButtonFrameUpButton"]
             local down = _G[frame:GetName().."ButtonFrameDownButton"]
             local bottom = _G[frame:GetName().."ButtonFrameBottomButton"]
-            --local chatMenu = _G[frame:GetName().."ButtonFrameMinimizeButton"]
             if up then up:Hide() end
             if down then down:Hide() end
             if bottom then bottom:Hide() end
-            --if chatMenu then chatMenu:Hide() end
-            FriendsMicroButton:Hide()
-            ChatFrameChannelButton:Hide()
-            ChatFrameMenuButton:Hide()
         end
     end
+    FriendsMicroButton:Hide()
+    ChatFrameChannelButton:Hide()
+    ChatFrameMenuButton:Hide()
 end
 
 local function debugFrame_GeneralDockManager()
     if zui.settings.debug then
-        local debugBackdrop = CreateFrame("Frame", "nil", GeneralDockManager, "BackdropTemplate")
+        local debugBackdrop = CreateFrame("Frame", nil, GeneralDockManager, "BackdropTemplate")
         debugBackdrop:SetAllPoints()
         debugBackdrop:SetFrameStrata("BACKGROUND")
         debugBackdrop:SetBackdrop({ bgFile = "Interface/Tooltips/UI-Tooltip-Background" })
@@ -70,21 +67,19 @@ local function debugFrame_GeneralDockManager()
     end
 end
 
----<<===================================================================================================== init on login
+---<===========================================================================================================>---<<AUX
 zui.loginTrigger(function()
+    -- Initialization
     AnchorChatToAssignedAnchor()
     HideChatButtons()
     debugFrame_GeneralDockManager()
 
-    -- Hook resize
+    -- Hook
     local anchor = GetAnchorTarget()
     if anchor and not anchor.care then
         anchor:HookScript("OnSizeChanged", AnchorChatToAssignedAnchor)
         anchor.care = true
     end
-end)
-
----<<========================================================================== zui.commitRegistry Function Registration
-zui.loginTrigger(function()
-        table.insert(zui.commitRegistry, AnchorChatToAssignedAnchor)
+    -- Commit Registry
+    table.insert(zui.commitRegistry, AnchorChatToAssignedAnchor)
 end)

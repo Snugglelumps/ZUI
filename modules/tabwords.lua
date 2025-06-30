@@ -65,7 +65,6 @@ local function RefreshTabWords()
 
         text:SetJustifyV("TOP")
         text:SetTextColor(1, 0.82, 0)
-        text:SetText("")              -- Clear first to force refresh
         text:SetText(tab:GetText())  -- Set actual tab label
 
         -- Anchor the button itself
@@ -156,10 +155,8 @@ for _, funcName in ipairs({"FCF_DockUpdate", "FCF_OpenNewWindow", "FCF_Close"}) 
     hooksecurefunc(funcName, RefreshTabWords)
 end
 
----<<===================================================================================================== init on login
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function()
+---<===========================================================================================================>---<<AUX
+zui.loginTrigger(function()
     local system = zui.settings.tabSystem
     if system == "ZUI" then
         anchorTabWords()
@@ -167,16 +164,9 @@ f:SetScript("OnEvent", function()
         initTabWords()
         HideGeneralDockManager()
         debugFrame_TabWords()
-    elseif system == "Blizzard" then
-        hideBlizzardChatTabStuff()
-    end
-end)
-
----<<========================================================================== zui.commitRegistry Function Registration
-zui.loginTrigger(function()
-    local system = zui.settings.tabSystem
-    if system == "ZUI" then
         table.insert(zui.commitRegistry, anchorTabWords)
         table.insert(zui.commitRegistry, RefreshTabWords)
+    elseif system == "Blizzard" then
+        hideBlizzardChatTabStuff()
     end
 end)

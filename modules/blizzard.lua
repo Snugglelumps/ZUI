@@ -1,8 +1,7 @@
 local _, zui = ...
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function()
-    -- Hook the default tooltip anchor behavior
+
+zui.loginTrigger(function() --probably too cautious
+    -- Anchors the tooltip to the rightAnchor frame
     hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip)
         if zui.frames.rightAnchor and tooltip then
             tooltip:ClearAllPoints()

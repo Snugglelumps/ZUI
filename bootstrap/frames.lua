@@ -1,41 +1,38 @@
 local _, zui = ...
 
+---<===================================================================================================>---<<2.1 Anchors
+---<==============================[Creates the right and left anchor frames. They are exposed globally via their names.]
+
 local function CreateRectangle(name, parent, x, y)
     local f = CreateFrame("Frame", name, parent or UIParent)
     f:SetSize(zui.settings.anchorWidth, zui.settings.anchorHeight)
     f:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
     f:SetFrameStrata("BACKGROUND")
 
-    -- Background
     f.bg = f:CreateTexture(nil, "BACKGROUND")
     f.bg:SetAllPoints(true)
-    f.bg:SetColorTexture(0, 0, 0, 0.25) -- Black, 30% opacity
+    f.bg:SetColorTexture(0, 0, 0, 0.25)
 
-    -- Border (using 4 textures for 1px border)
-    local borderColor = {0, 0, 0, 1} -- Black, fully opaque
+    local borderColor = {0, 0, 0, 1}
 
-    -- Top
     f.top = f:CreateTexture(nil, "BORDER")
     f.top:SetColorTexture(unpack(borderColor))
     f.top:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
     f.top:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
     f.top:SetHeight(1)
 
-    -- Bottom
     f.bottom = f:CreateTexture(nil, "BORDER")
     f.bottom:SetColorTexture(unpack(borderColor))
     f.bottom:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 0, 0)
     f.bottom:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", 0, 0)
     f.bottom:SetHeight(1)
 
-    -- Left
     f.left = f:CreateTexture(nil, "BORDER")
     f.left:SetColorTexture(unpack(borderColor))
     f.left:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
     f.left:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 0, 0)
     f.left:SetWidth(1)
 
-    -- Right
     f.right = f:CreateTexture(nil, "BORDER")
     f.right:SetColorTexture(unpack(borderColor))
     f.right:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
@@ -44,20 +41,21 @@ local function CreateRectangle(name, parent, x, y)
 
     return f
 end
+
 local function createAnchors()
     local w = zui.settings.anchorWidth
     local h = zui.settings.anchorHeight
 
     -- Create and anchor rightAnchor (bottom right of screen)
-    zui.frames.rightAnchor = CreateRectangle("ZUIRightAnchor", UIParent)
+    zui.frames.rightAnchor = CreateRectangle("ZUIRightAnchor", UIParent) -- global exposure via name, ty blizz
     zui.frames.rightAnchor:ClearAllPoints()
     zui.frames.rightAnchor:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -1, 1)
     zui.frames.rightAnchor:SetSize(w, h)
     zui.frames.rightAnchor:EnableMouse(true)
     zui.frames.rightAnchor:SetMouseClickEnabled(false)
 
-    -- Create and anchor leftAnchor (bottom left of screen)
-    zui.frames.leftAnchor = CreateRectangle("ZUILeftAnchor", UIParent)
+    -- Create and anchor leftAnchor (believe it or not... bottom left of screen)
+    zui.frames.leftAnchor = CreateRectangle("ZUILeftAnchor", UIParent) -- global exposure via name
     zui.frames.leftAnchor:ClearAllPoints()
     zui.frames.leftAnchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 1, 1)
     zui.frames.leftAnchor:SetSize(w, h)
@@ -66,9 +64,9 @@ local function createAnchors()
 end
 
 local function updateAnchors()
-    -- Safely grab settings (with sane defaults)
-    local w = tonumber(zui.settings.anchorWidth) or 420
-    local h = tonumber(zui.settings.anchorHeight) or 200
+    -- grabs settings, can add defaults
+    local w = tonumber(zui.settings.anchorWidth)-- or 420
+    local h = tonumber(zui.settings.anchorHeight)-- or 200
 
     -- Helper to update one anchor
     local function resize(anchor, point, relPoint, x, y)
@@ -83,6 +81,8 @@ local function updateAnchors()
     resize(zui.frames.rightAnchor, "BOTTOMRIGHT", "BOTTOMRIGHT", -1,  1)
 end
 
+---<=================================================================================>---<<2.2 Settings Frames and Title
+---<======================================================[Creates main settings window, title, and  left/right panels.]
 zui.frames.BG = CreateFrame("Frame", "ZUI Settings", UIParent, "BackdropTemplate")
 zui.frames.BG:SetSize(690, 420)
 zui.frames.BG:SetPoint("CENTER")
@@ -95,7 +95,7 @@ zui.frames.BG:SetScript("OnDragStart", zui.frames.BG.StartMoving)
 zui.frames.BG:SetScript("OnDragStop", zui.frames.BG.StopMovingOrSizing)
 zui.frames.BG:Hide()
 
--- Left and Right Panel Frames
+
 zui.frames.leftBG = CreateFrame("Frame", nil, zui.frames.BG, "BackdropTemplate")
 zui.frames.leftBG:SetSize(200, 358)
 zui.frames.leftBG:SetPoint("TOPLEFT", zui.frames.BG, "TOPLEFT", 8, -20)
@@ -122,7 +122,32 @@ zui.frames.rightBG:SetBackdrop({
 })
 zui.frames.rightBG:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
 
--- Predeclare right-side content panels
+-- Title Frames
+local titleFrame = CreateFrame("Frame", nil, zui.frames.BG, "BackdropTemplate")
+titleFrame:SetSize(100, 36)
+titleFrame:SetPoint("TOP", zui.frames.BG, "TOP", 0, 18)
+local texMid = titleFrame:CreateTexture(nil, "OVERLAY")
+texMid:SetTexture("interface/framegeneral/uiframediamondmetalheader2x")
+texMid:SetTexCoord(0, 0.5, 0.00390625, 0.30859375)
+texMid:SetSize(36, 39)
+texMid:SetPoint("CENTER", titleFrame, "CENTER")
+local texLeft = titleFrame:CreateTexture(nil, "OVERLAY")
+texLeft:SetTexture("interface/framegeneral/uiframediamondmetalheader2x")
+texLeft:SetTexCoord(0.0078125, 0.5078125, 0.31640625, 0.62109375)
+texLeft:SetSize(32, 39)
+texLeft:SetPoint("LEFT", titleFrame, "LEFT", 0, 0)
+local texRight = titleFrame:CreateTexture(nil, "OVERLAY")
+texRight:SetTexture("interface/framegeneral/uiframediamondmetalheader2x")
+texRight:SetTexCoord(0.0078125, 0.5078125, 0.62890625, 0.93359375)
+texRight:SetSize(32, 39)
+texRight:SetPoint("RIGHT", titleFrame, "RIGHT", 0, 0)
+
+titleFrame:SetBackdropColor(1, 0.1, 0.1, 0.9)
+local label = titleFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+label:SetPoint("CENTER")
+label:SetText("ZUI Settings")
+
+---<=================================================================================>---<<2.3 Pre-declaration of Panels
 zui.panels.about = CreateFrame("Frame", nil, zui.frames.rightBG)
 zui.panels.about:SetAllPoints()
 zui.panels.about:Hide()
@@ -151,34 +176,10 @@ zui.panels.masque = CreateFrame("Frame", nil, zui.frames.rightBG)
 zui.panels.masque:SetAllPoints()
 zui.panels.masque:Hide()
 
--- Title Frame
-local titleFrame = CreateFrame("Frame", nil, zui.frames.BG, "BackdropTemplate")
-titleFrame:SetSize(100, 36)
-titleFrame:SetPoint("TOP", zui.frames.BG, "TOP", 0, 18)
-local texMid = titleFrame:CreateTexture(nil, "OVERLAY")
-texMid:SetTexture("interface/framegeneral/uiframediamondmetalheader2x")
-texMid:SetTexCoord(0, 0.5, 0.00390625, 0.30859375)
-texMid:SetSize(36, 39)
-texMid:SetPoint("CENTER", titleFrame, "CENTER")
-local texLeft = titleFrame:CreateTexture(nil, "OVERLAY")
-texLeft:SetTexture("interface/framegeneral/uiframediamondmetalheader2x")
-texLeft:SetTexCoord(0.0078125, 0.5078125, 0.31640625, 0.62109375)
-texLeft:SetSize(32, 39)
-texLeft:SetPoint("LEFT", titleFrame, "LEFT", 0, 0)
-local texRight = titleFrame:CreateTexture(nil, "OVERLAY")
-texRight:SetTexture("interface/framegeneral/uiframediamondmetalheader2x")
-texRight:SetTexCoord(0.0078125, 0.5078125, 0.62890625, 0.93359375)
-texRight:SetSize(32, 39)
-texRight:SetPoint("RIGHT", titleFrame, "RIGHT", 0, 0)
-
-titleFrame:SetBackdropColor(1, 0.1, 0.1, 0.9)
-local label = titleFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-label:SetPoint("CENTER")
-label:SetText("ZUI Settings")
-
--- Sidebar Buttons
-local sidebarLabels = { "About", "General", "Chat", "Profiles" }
-local subLabels     = { "Details!", "Prat 3.0", "WeakAuras" }
+---<===========================================================================================>---<<2.4 Sidebar Buttons
+---<===========================================[Includes logic for highlight states and corresponding panel visibility.]
+local sidebarLabels = { "About", "General", "Profiles" }
+local subLabels     = { "Details!", "WeakAuras" }
 
 local sidebarButtons = {}
 local subButtons     = {}
@@ -191,7 +192,7 @@ local panelMap = {
     Chat      = zui.panels.chat,
     Profiles  = zui.panels.profiles,
     ["Details!"] = zui.panels.details,
-    ["Prat 3.0"] = zui.panels.prat,
+    --["Prat 3.0"] = zui.panels.prat,
     WeakAuras    = zui.panels.masque,
 }
 
@@ -252,7 +253,6 @@ for _, label in ipairs(sidebarLabels) do
     highlight:Hide()
     btn.highlight = highlight
 
-    -- Button label
     local text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     text:SetPoint("LEFT", 4, 0)
     text:SetText(label)
@@ -274,7 +274,6 @@ for _, label in ipairs(sidebarLabels) do
         btn:SetScript("OnClick", function()
             ClearSidebarHighlights()
             btn.highlight:Show()
-            print("ZUI Sidebar clicked:", label)
             ShowPanel(label)
         end)
     end
@@ -286,7 +285,7 @@ for _, label in ipairs(sidebarLabels) do
     yOffset = yOffset + spacing
 end
 
--- Create sub-buttons under Profiles
+-- Create sub-buttons under 'Profiles'
 for _, label in ipairs(subLabels) do
     local btn = CreateFrame("Button", nil, zui.frames.leftBG)
     btn:SetSize(160, 22)
@@ -309,7 +308,6 @@ for _, label in ipairs(subLabels) do
     btn:SetScript("OnClick", function()
         ClearSidebarHighlights()
         btn.highlight:Show()
-        print("ZUI Sub clicked:", label)
         ShowPanel(label)
     end)
 
@@ -335,6 +333,7 @@ zui.buttons.close:SetSize(100, 24)
 zui.buttons.close:SetPoint("BOTTOMRIGHT", -10, 10)
 zui.buttons.close:SetText("Close")
 
+---<===================================================================================================>---<<2.5 Borders
 -- Universal border piece creator
 local function AddBorderPiece(config)
     local tex = config.parent:CreateTexture(nil, config.layer or "BORDER")
@@ -438,30 +437,33 @@ for _, cfg in pairs(cornerConfig) do
     cfg.parent = zui.frames.BG
     AddCornerPiece(cfg)
 end
----<<===================================================================================================== General Panel
+---<====================================================================================================>---<<2.6 Labels
 local l = zui.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 l:SetFont("Fonts\\FRIZQT__.TTF", 16, "")
-l:SetPoint("TOP", 0, -16)
-l:SetText("Anchor Dimensions")
+l:SetPoint("TOPLEFT", 16, -16)
+l:SetText("Anchor Settings")
+
+--local l = zui.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+--l:SetFont("Fonts\\FRIZQT__.TTF", 16, "")
+--l:SetPoint("TOP", 0, -116)
+--l:SetText("Anchor Content")
 
 local l = zui.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 l:SetFont("Fonts\\FRIZQT__.TTF", 16, "")
-l:SetPoint("TOP", 0, -116)
-l:SetText("Anchor Content")
+l:SetPoint("TOPLEFT", 16, -124)
+l:SetText("Styles")
 
-local l = zui.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-l:SetFont("Fonts\\FRIZQT__.TTF", 16, "")
-l:SetPoint("TOP", 0, -216)
-l:SetText("Minimap Style")
+local divider = zui.panels.general:CreateTexture(nil, "ARTWORK")
+divider:SetColorTexture(1, 1, 1, 0.2)
+divider:SetSize(zui.panels.general:GetWidth() - 32, 2)
+divider:SetPoint("TOP", zui.panels.general, "TOP", 0, -108)
 
----<<===================================================================================================== init on login
-local f = CreateFrame("Frame") --- this is for very special boys and girls that throw fits if you take their toys
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function()
-    createAnchors()
-end)
 
----<<========================================================================== zui.commitRegistry Function Registration
+---<===========================================================================================================>---<<AUX
 zui.loginTrigger(function()
-        table.insert(zui.commitRegistry, updateAnchors)
+    -- Initialization
+    createAnchors()
+
+    -- Commit Registry
+    table.insert(zui.commitRegistry, updateAnchors)
 end)

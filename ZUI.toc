@@ -6,13 +6,13 @@
 ## SavedVariables: ZUISettings
 
 bootstrap/init.lua
-resources/profiles.lua
-
 bootstrap/frames.lua
-core.lua
 
 modules/minimap.lua
 modules/blizzard.lua
 modules/details.lua
 modules/chat.lua
 modules/tabwords.lua
+
+resources/profiles.lua
+main.lua
