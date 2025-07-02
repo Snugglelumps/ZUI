@@ -25,6 +25,7 @@ end
 ---<=========================================================================================>---<<3.2 Anchor Dimensions
 local function initAnchorDimensions()
     local panel = zui.panels.general
+    local UIclientWidth, UIclientHeight = UIParent:GetWidth(), UIParent:GetHeight()
 
     local widthInput = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
     widthInput:SetSize(60, 20)
@@ -34,7 +35,13 @@ local function initAnchorDimensions()
     widthInput:SetText(tostring(zui.settings.anchorWidth))
     widthInput:SetScript("OnTextChanged", function(self)
         local value = tonumber(self:GetText())
-        if value >= 1 and value <= 2000 then
+        if not value then
+            return -- do nothing if input is empty or not a number
+        end
+        if value > math.floor(0.5 + UIclientWidth / 2) then
+            zui.settings.anchorWidth = math.floor(0.5 + UIclientWidth / 2)
+            widthInput:SetText(tostring(zui.settings.anchorWidth))
+        elseif value >= 1 then
             zui.settings.anchorWidth = value
         end
     end)
@@ -50,13 +57,26 @@ local function initAnchorDimensions()
     heightInput:SetText(tostring(zui.settings.anchorHeight))
     heightInput:SetScript("OnTextChanged", function(self)
         local value = tonumber(self:GetText())
-        if value >= 1 and value <= 2000 then
+        if not value then
+            return -- do nothing if input is empty or not a number
+        end
+        if value > math.floor(0.5 + UIclientHeight) then
+            zui.settings.anchorHeight = math.floor(0.5 + UIclientHeight)
+            heightInput:SetText(tostring(zui.settings.anchorHeight))
+        elseif value >= 1 then
             zui.settings.anchorHeight = value
         end
     end)
     local heightLabel = heightInput:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     heightLabel:SetPoint("BOTTOM", heightInput, "TOP", -3, 4)
     heightLabel:SetText("Height")
+
+    if zui.settings.debug then
+        local pw, ph = GetPhysicalScreenSize()
+        local uw, uh = UIParent:GetWidth(), UIParent:GetHeight()
+        print("Physical:", pw, ph)
+        print("UIParent:", uw, uh)
+    end
 end
 
 ---<========================================================================================>---<<3.3 Anchor Assignments

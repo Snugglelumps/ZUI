@@ -44,7 +44,7 @@ f:SetScript("OnEvent", function(_, _, name)
     zui.settings = ZUISettings
     zui.assertSettings()
     if zui.settings.reloadUI then zui.settings.reloadUI = false end
-    zui.settings.debug = true
+    zui.settings.debug = false
 end)
 
 local loginQueue = {}
