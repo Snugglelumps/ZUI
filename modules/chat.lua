@@ -1,14 +1,14 @@
-local _, zui = ...
+local _, SnugUI = ...
 
 -- Determines the anchor target for the chat frame, or nil
 local function GetAnchorTarget()
-    local asgn = zui.settings.anchorAssignments
+    local asgn = SnugUI.settings.anchorAssignments
     if not asgn then return nil end
 
-    if (asgn.left == "Chat" and zui.frames.leftAnchor) then
-        return zui.frames.leftAnchor
-    elseif (asgn.right == "Chat" and zui.frames.rightAnchor) then
-        return zui.frames.rightAnchor end
+    if (asgn.left == "Chat" and SnugUI.frames.leftAnchor) then
+        return SnugUI.frames.leftAnchor
+    elseif (asgn.right == "Chat" and SnugUI.frames.rightAnchor) then
+        return SnugUI.frames.rightAnchor end
     return nil
 end
 
@@ -35,8 +35,8 @@ local function AnchorChatToAssignedAnchor()
         editBox:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, offsetY)
         editBox:SetPoint("BOTTOMRIGHT", anchor, "TOPRIGHT", 0, offsetY)
         editBox:SetHeight(20)
-    elseif zui.settings.debug then
-        print("ZUI Chat: Failed to anchor. Missing anchor or ChatFrame1.")
+    elseif SnugUI.settings.debug then
+        print("SnugUI Chat: Failed to anchor. Missing anchor or ChatFrame1.")
     end
 end
 
@@ -58,7 +58,7 @@ local function HideChatButtons()
 end
 
 local function debugFrame_GeneralDockManager()
-    if zui.settings.debug then
+    if SnugUI.settings.debug then
         local debugBackdrop = CreateFrame("Frame", nil, GeneralDockManager, "BackdropTemplate")
         debugBackdrop:SetAllPoints()
         debugBackdrop:SetFrameStrata("BACKGROUND")
@@ -68,7 +68,7 @@ local function debugFrame_GeneralDockManager()
 end
 
 ---<===========================================================================================================>---<<AUX
-zui.loginTrigger(function()
+SnugUI.loginTrigger(function()
     -- Initialization
     AnchorChatToAssignedAnchor()
     HideChatButtons()
@@ -81,5 +81,5 @@ zui.loginTrigger(function()
         anchor.care = true
     end
     -- Commit Registry
-    table.insert(zui.commitRegistry, AnchorChatToAssignedAnchor)
+    table.insert(SnugUI.commitRegistry, AnchorChatToAssignedAnchor)
 end)

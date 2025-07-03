@@ -1,25 +1,30 @@
-local _, zui = ...
+local _, SnugUI = ...
 
 ---<=======================================================================================>---<<1.1 Tables and Settings
 ---<===================================================================================[Initializes tables and settings]
 -- Ensure SavedVariables table exists
-ZUISettings = ZUISettings or {}
-zui.settings = ZUISettings
+SnugUISettings = SnugUISettings or {}
+SnugUI.settings = SnugUISettings
 
-zui.frames         = zui.frames or {}
-zui.panels         = zui.panels or {}
-zui.buttons        = zui.buttons or {}
-zui.commitRegistry = zui.commitRegistry or {}
-zui.settings.anchorAssignments = zui.settings.anchorAssignments or {}
+SnugUI.frames         = SnugUI.frames or {} -- mostly background frames
+SnugUI.panels         = SnugUI.panels or {} -- content panels for settings UI
+SnugUI.buttons        = SnugUI.buttons or {}
+SnugUI.commitRegistry = SnugUI.commitRegistry or {}
+SnugUI.settings.anchorAssignments = SnugUI.settings.anchorAssignments or {}
+
+SnugUI.settings.anchors      =SnugUI.settings.anchors or {}
+SnugUI.settings.minimap      =SnugUI.settings.minimap or {}
+SnugUI.functions             =SnugUI.functions or {}
+
 
 -- Define settings assertion and apply via the ADDON_LOADED handler
-function zui.assertSettings()
+local function initializeSettings()
     local defaults = {
         anchorAssignments = { left = "Chat", right = "Details!" },
         anchorWidth       = 420,
         anchorHeight      = 200,
-        tabSystem         = "ZUI",
-        minimapStyle      = "ZUI",
+        tabSystem         = "SnugUI",
+        minimapStyle      = "SnugUI",
     }
 
     local function applyDefaults(target, source)
@@ -33,23 +38,23 @@ function zui.assertSettings()
         end
     end
 
-    applyDefaults(zui.settings, defaults)
+    applyDefaults(SnugUI.settings, defaults)
 end
 
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function(_, _, name)
     if name ~= "SnugUI" then return end
-    ZUISettings = ZUISettings or {}
-    zui.settings = ZUISettings
-    zui.assertSettings()
-    if zui.settings.reloadUI then zui.settings.reloadUI = false end
-    zui.settings.debug = false
+    SnugUISettings = SnugUISettings or {}
+    SnugUI.settings = SnugUISettings
+    initializeSettings()
+    if SnugUI.settings.reloadUI then SnugUI.settings.reloadUI = false end
+    SnugUI.settings.debug = false
 end)
 
 local loginQueue = {}
 
-function zui.loginTrigger(callback)
+function SnugUI.loginTrigger(callback)
     table.insert(loginQueue, callback)
 end
 

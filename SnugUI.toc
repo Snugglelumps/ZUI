@@ -3,7 +3,7 @@
 ## Notes: A clean, focused UI enhancement addon for World of Warcraft.
 ## Author: Snugglelumps
 ## Version: 1.0
-## SavedVariables: ZUISettings
+## SavedVariables: SnugUISettings
 
 bootstrap/init.lua
 bootstrap/frames.lua
