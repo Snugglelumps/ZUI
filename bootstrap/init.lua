@@ -68,3 +68,28 @@ loginFrame:SetScript("OnEvent", function(self)
     self:UnregisterAllEvents()
     self:SetScript("OnEvent", nil)
 end)
+
+function SnugUI.functions.debugNamespace()
+    if not SnugUI.settings or not SnugUI.settings.debug then return end
+
+    print("=========== SnugUI Namespace ===========")
+
+    for key, value in pairs(SnugUI) do
+        local valueType = type(value)
+        if valueType == "function" then
+            print("🧠 function:", key)
+        elseif valueType == "table" then
+            print("📦 table:", key)
+        else
+            print("🔹", key, "=", tostring(value))
+        end
+    end
+
+    print("=========== end ===========")
+end
+
+SnugUI.loginTrigger(function()
+    C_Timer.After(3, function()
+        SnugUI.functions.debugNamespace()
+    end)
+end)
