@@ -110,12 +110,12 @@ local function CreateAnchorDropdown(parent, key, x, y)
                     local otherDrop = SnugUI.dropdowns[otherKey]
                     if otherDrop then
                         UIDropDownMenu_SetSelectedValue(otherDrop, "")
-                        _G[otherDrop:GetName() .. "Text"]:SetText("—")
+                        UIDropDownMenu_SetText(otherDrop, "—")
                     end
                 end
                 SnugUI.settings.anchorAssignments[key] = selfArg.value
                 UIDropDownMenu_SetSelectedValue(dropdown, selfArg.value)
-                _G[dropdown:GetName() .. "Text"]:SetText((selfArg.value == "") and "—" or selfArg.value)
+                UIDropDownMenu_SetText(dropdown, (selfArg.value == "") and "—" or selfArg.value)
             end
             UIDropDownMenu_AddButton(info, level)
         end
@@ -128,7 +128,7 @@ local function CreateAnchorDropdown(parent, key, x, y)
         SnugUI.settings.anchorAssignments[key] = value
     end
     UIDropDownMenu_SetSelectedValue(dropdown, value)
-    _G[dropdown:GetName() .. "Text"]:SetText((value == "") and "—" or value)
+    UIDropDownMenu_SetText(dropdown, (value == "") and "—" or value)
 
     return dropdown
 end
@@ -267,11 +267,11 @@ SlashCmdList["SnugUI"] = function()
     end
 end
 SnugUI.loginTrigger(function()
-    C_Timer.After(0.1, function()
+    --C_Timer.After(0.1, function()
         if SnugUI.settings.debug then
             SnugUI.frames.BG:Show()
         end
-    end)
+    --end)
 end)
 
 SnugUI.buttons.apply:SetScript("OnClick", function()
