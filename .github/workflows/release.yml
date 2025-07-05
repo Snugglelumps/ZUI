@@ -20,7 +20,7 @@ jobs:
           args: -g classic -n "SnugUI"
 
       - name: Upload to CurseForge
-        uses: LIMGitHub/curseforge-uploader@v1
+        uses: LIMGitHub/curseforge-upload@v1
         with:
           token: ${{ secrets.CF_API_TOKEN }}
           project-id: 1297363
