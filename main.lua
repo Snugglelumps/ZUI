@@ -484,7 +484,7 @@ SnugUI.loginTrigger(function()
     -- Initialization
     initAnchorDimensions()
     initAnchorAssignments()
-    initMinimapSettings()
+    --initMinimapSettings()
     CreateTabSystemDropdown()
     setDetailsExportBox()
     createQuestButton()

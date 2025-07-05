@@ -46,8 +46,12 @@ local function SnugUIMinimap()
     if GameTimeFrame then
         GameTimeFrame:ClearAllPoints()
         GameTimeFrame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 0, 0)
-        local size = (SnugUI.settings.minimap.scale * .7)
-        GameTimeFrame:SetScale(size)
+
+        local scale = tonumber(SnugUI.settings.minimap.scale) or 1
+        local size = scale * 0.45
+        if GameTimeFrame:GetScale() ~= size then
+            GameTimeFrame:SetScale(size)
+        end
     end
     if TimeManagerClockButton then
     TimeManagerClockButton:ClearAllPoints()
@@ -64,12 +68,10 @@ local function SnugUIMinimap()
     Minimap:ClearAllPoints()
     Minimap:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", offset, offset)
     Minimap:SetClampedToScreen(false)
-    MinimapCluster:SetScale(1)
 end
 
 local function blizzardMinimap()
     Minimap:SetMaskTexture("interface\\masks\\circlemaskscalable")
-    Minimap:SetScale(1)
 end
 
 function applyMinimapStyle()
@@ -86,12 +88,7 @@ local previousScale
 SnugUI.functions.applyMinimapScale = function()
     local currentScale = SnugUI.settings.minimap.scale
     if previousScale == currentScale then return end
-    if SnugUI.settings.minimap.style == "SnugUI" then
-        Minimap:SetScale(currentScale)
-    end
-    if SnugUI.settings.minimap.style == "Blizzard" then
         MinimapCluster:SetScale(currentScale)
-    end
     previousScale = currentScale
 end
 
