@@ -28,6 +28,10 @@ ___
 * Disabled debug, and removed erroneous debugging lines
 
 ## 1.1 SnugUI it is, ZUI was taken lol.
-* Set up git automate
 * Fixed a nil compare in the anchor dimension logic, improved the logic to bound based off UIParent dims.
 * Moved global dropdown frames into namespace
+* Completed namespace rename
+* New table structure for namespace settings
+* Added QOL panel and new quest item bar feature
+
+## 1.2 

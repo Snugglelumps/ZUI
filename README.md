@@ -1,4 +1,4 @@
-# SnugUI
+or# SnugUI
 
 _A clean, focused UI enhancement addon for World of Warcraft._
 
