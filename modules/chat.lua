@@ -1,14 +1,15 @@
 local _, SnugUI = ...
 
--- Determines the anchor target for the chat frame, or nil
 local function GetAnchorTarget()
-    local asgn = SnugUI.settings.anchorAssignments
-    if not asgn then return nil end
+    local anchors = SnugUI.settings.anchors
+    if not anchors then return nil end
 
-    if (asgn.left == "Chat" and SnugUI.frames.leftAnchor) then
+    if (anchors.leftAssignment == "Chat" and SnugUI.frames.leftAnchor) then
         return SnugUI.frames.leftAnchor
-    elseif (asgn.right == "Chat" and SnugUI.frames.rightAnchor) then
-        return SnugUI.frames.rightAnchor end
+    elseif (anchors.rightAssignment == "Chat" and SnugUI.frames.rightAnchor) then
+        return SnugUI.frames.rightAnchor
+    end
+
     return nil
 end
 

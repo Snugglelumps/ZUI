@@ -5,7 +5,7 @@ local _, SnugUI = ...
 
 local function CreateRectangle(name, parent, x, y)
     local f = CreateFrame("Frame", name, parent or UIParent)
-    f:SetSize(SnugUI.settings.anchorWidth, SnugUI.settings.anchorHeight)
+    f:SetSize(SnugUI.settings.anchors.width, SnugUI.settings.anchors.height)
     f:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
     f:SetFrameStrata("BACKGROUND")
 
@@ -43,8 +43,8 @@ local function CreateRectangle(name, parent, x, y)
 end
 
 local function createAnchors()
-    local w = SnugUI.settings.anchorWidth
-    local h = SnugUI.settings.anchorHeight
+    local w = SnugUI.settings.anchors.width
+    local h = SnugUI.settings.anchors.height
 
     -- Create and anchor rightAnchor (bottom right of screen)
     SnugUI.frames.rightAnchor = CreateRectangle("SnugUIRightAnchor", UIParent) -- global exposure via name, ty blizz
@@ -65,8 +65,8 @@ end
 
 local function updateAnchors()
     -- grabs settings, can add defaults
-    local w = tonumber(SnugUI.settings.anchorWidth)-- or 420
-    local h = tonumber(SnugUI.settings.anchorHeight)-- or 200
+    local w = tonumber(SnugUI.settings.anchors.width)-- or 420
+    local h = tonumber(SnugUI.settings.anchors.height)-- or 200
 
     -- Helper to update one anchor
     local function resize(anchor, point, relPoint, x, y)
@@ -94,7 +94,7 @@ SnugUI.frames.BG:RegisterForDrag("LeftButton")
 SnugUI.frames.BG:SetScript("OnDragStart", SnugUI.frames.BG.StartMoving)
 SnugUI.frames.BG:SetScript("OnDragStop", SnugUI.frames.BG.StopMovingOrSizing)
 SnugUI.frames.BG:Hide()
-
+table.insert(UISpecialFrames, "SnugUI Settings")
 
 SnugUI.frames.leftBG = CreateFrame("Frame", nil, SnugUI.frames.BG, "BackdropTemplate")
 SnugUI.frames.leftBG:SetSize(200, 358)
@@ -176,9 +176,17 @@ SnugUI.panels.masque = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
 SnugUI.panels.masque:SetAllPoints()
 SnugUI.panels.masque:Hide()
 
+SnugUI.panels.qol = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.qol:SetAllPoints()
+SnugUI.panels.qol:Hide()
+
+SnugUI.panels.minimap = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.minimap:SetAllPoints()
+SnugUI.panels.minimap:Hide()
+
 ---<===========================================================================================>---<<2.4 Sidebar Buttons
 ---<===========================================[Includes logic for highlight states and corresponding panel visibility.]
-local sidebarLabels = { "About", "General", "Profiles" }
+local sidebarLabels = { "About", "General", "Minimap", "QOL", "Profiles" }
 local subLabels     = { "Details!", "WeakAuras" }
 
 local sidebarButtons = {}
@@ -190,6 +198,8 @@ local panelMap = {
     About     = SnugUI.panels.about,
     General   = SnugUI.panels.general,
     Chat      = SnugUI.panels.chat,
+    QOL       = SnugUI.panels.qol,
+    Minimap   = SnugUI.panels.minimap,
     Profiles  = SnugUI.panels.profiles,
     ["Details!"] = SnugUI.panels.details,
     --["Prat 3.0"] = SnugUI.panels.prat,

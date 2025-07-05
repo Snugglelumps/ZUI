@@ -12,19 +12,32 @@ SnugUI.buttons        = SnugUI.buttons or {}
 SnugUI.commitRegistry = SnugUI.commitRegistry or {}
 SnugUI.settings.anchorAssignments = SnugUI.settings.anchorAssignments or {}
 
-SnugUI.settings.anchors      =SnugUI.settings.anchors or {}
-SnugUI.settings.minimap      =SnugUI.settings.minimap or {}
-SnugUI.functions             =SnugUI.functions or {}
+SnugUI.settings.anchors         = SnugUI.settings.anchors or {}
+SnugUI.settings.minimap         = SnugUI.settings.minimap or {}
+SnugUI.settings.qol             = SnugUI.settings.qol or {}
+SnugUI.functions                = SnugUI.functions or {}
 
 
 -- Define settings assertion and apply via the ADDON_LOADED handler
 local function initializeSettings()
     local defaults = {
-        anchorAssignments = { left = "Chat", right = "Details!" },
-        anchorWidth       = 420,
-        anchorHeight      = 200,
         tabSystem         = "SnugUI",
-        minimapStyle      = "SnugUI",
+        minimapStyle      = "SnugUI", --old defaults end
+        anchors = {
+            width = 420,
+            height = 200,
+            leftAssignment = "Chat",
+            rightAssignment = "Details!",
+        },
+        minimap = {
+            style = "SnugUI",
+            lockTracker = true,
+            hideWorldMapButton = true,
+        },
+        qol ={
+            questButton = true,
+            questHotkey = "G",
+        },
     }
 
     local function applyDefaults(target, source)
@@ -49,7 +62,7 @@ f:SetScript("OnEvent", function(_, _, name)
     SnugUI.settings = SnugUISettings
     initializeSettings()
     if SnugUI.settings.reloadUI then SnugUI.settings.reloadUI = false end
-    SnugUI.settings.debug = false
+    SnugUI.settings.debug = true
 end)
 
 local loginQueue = {}

@@ -13,6 +13,7 @@ modules/blizzard.lua
 modules/details.lua
 modules/chat.lua
 modules/tabwords.lua
+modules/qol.lua
 
 resources/profiles.lua
 main.lua

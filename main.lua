@@ -32,17 +32,17 @@ local function initAnchorDimensions()
     widthInput:SetPoint("TOPLEFT", panel, "TOPLEFT", 108, -60)
     widthInput:SetAutoFocus(false)
     widthInput:SetNumeric(true)
-    widthInput:SetText(tostring(SnugUI.settings.anchorWidth))
+    widthInput:SetText(tostring(SnugUI.settings.anchors.width))
     widthInput:SetScript("OnTextChanged", function(self)
         local value = tonumber(self:GetText())
         if not value then
             return -- do nothing if input is empty or not a number
         end
         if value > math.floor(0.5 + UIclientWidth / 2) then
-            SnugUI.settings.anchorWidth = math.floor(0.5 + UIclientWidth / 2)
-            widthInput:SetText(tostring(SnugUI.settings.anchorWidth))
+            SnugUI.settings.anchors.width = math.floor(0.5 + UIclientWidth / 2)
+            widthInput:SetText(tostring(SnugUI.settings.anchors.width))
         elseif value >= 1 then
-            SnugUI.settings.anchorWidth = value
+            SnugUI.settings.anchors.width = value
         end
     end)
     local widthLabel = widthInput:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -54,17 +54,17 @@ local function initAnchorDimensions()
     heightInput:SetPoint("TOPLEFT", panel, "TOPLEFT", 32, -60)
     heightInput:SetAutoFocus(false)
     heightInput:SetNumeric(true)
-    heightInput:SetText(tostring(SnugUI.settings.anchorHeight))
+    heightInput:SetText(tostring(SnugUI.settings.anchors.height))
     heightInput:SetScript("OnTextChanged", function(self)
         local value = tonumber(self:GetText())
         if not value then
             return -- do nothing if input is empty or not a number
         end
         if value > math.floor(0.5 + UIclientHeight) then
-            SnugUI.settings.anchorHeight = math.floor(0.5 + UIclientHeight)
-            heightInput:SetText(tostring(SnugUI.settings.anchorHeight))
+            SnugUI.settings.anchors.height = math.floor(0.5 + UIclientHeight)
+            heightInput:SetText(tostring(SnugUI.settings.anchors.height))
         elseif value >= 1 then
-            SnugUI.settings.anchorHeight = value
+            SnugUI.settings.anchors.height = value
         end
     end)
     local heightLabel = heightInput:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -82,19 +82,20 @@ end
 ---<========================================================================================>---<<3.3 Anchor Assignments
 local anchorOptions = { "", "Chat", "Details!" }
 
-local function CreateAnchorDropdown(parent, key, x, y)
+local function CreateAnchorDropdown(parent, sideKey, x, y)
     SnugUI.dropdowns = SnugUI.dropdowns or {}
+    local settings = SnugUI.settings.anchors
 
     -- Dropdown
-    local dropdown = CreateFrame("Frame", "SnugUIAnchorDropdown" .. key, parent, "UIDropDownMenuTemplate")
+    local dropdown = CreateFrame("Frame", "SnugUIAnchorDropdown" .. sideKey, parent, "UIDropDownMenuTemplate")
     dropdown:SetPoint("TOPRIGHT", parent, "TOPRIGHT", x, y)
     UIDropDownMenu_SetWidth(dropdown, 90)
-    SnugUI.dropdowns[key] = dropdown
+    SnugUI.dropdowns[sideKey] = dropdown
 
     -- Label
     local label = dropdown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     label:SetPoint("BOTTOM", dropdown, "TOP", 0, 4)
-    label:SetText((key == "left") and "Left Anchor" or "Right Anchor")
+    label:SetText((sideKey == "left") and "Left Anchor" or "Right Anchor")
 
     -- Menu Initialization
     UIDropDownMenu_Initialize(dropdown, function(self, level)
@@ -102,18 +103,18 @@ local function CreateAnchorDropdown(parent, key, x, y)
             local info = UIDropDownMenu_CreateInfo()
             info.text = (option == "") and "—" or option
             info.value = option
-            info.checked = (SnugUI.settings.anchorAssignments[key] == option)
+            info.checked = (settings[sideKey .. "Assignment"] == option)
             info.func = function(selfArg)
-                local otherKey = (key == "left") and "right" or "left"
-                if SnugUI.settings.anchorAssignments[otherKey] == selfArg.value then
-                    SnugUI.settings.anchorAssignments[otherKey] = ""
+                local otherKey = (sideKey == "left") and "right" or "left"
+                if settings[otherKey .. "Assignment"] == selfArg.value then
+                    settings[otherKey .. "Assignment"] = ""
                     local otherDrop = SnugUI.dropdowns[otherKey]
                     if otherDrop then
                         UIDropDownMenu_SetSelectedValue(otherDrop, "")
                         UIDropDownMenu_SetText(otherDrop, "—")
                     end
                 end
-                SnugUI.settings.anchorAssignments[key] = selfArg.value
+                settings[sideKey .. "Assignment"] = selfArg.value
                 UIDropDownMenu_SetSelectedValue(dropdown, selfArg.value)
                 UIDropDownMenu_SetText(dropdown, (selfArg.value == "") and "—" or selfArg.value)
             end
@@ -122,16 +123,17 @@ local function CreateAnchorDropdown(parent, key, x, y)
     end)
 
     -- Initial Value
-    local value = SnugUI.settings.anchorAssignments[key]
+    local value = settings[sideKey .. "Assignment"]
     if not tContains(anchorOptions, value) then
         value = ""
-        SnugUI.settings.anchorAssignments[key] = value
+        settings[sideKey .. "Assignment"] = value
     end
     UIDropDownMenu_SetSelectedValue(dropdown, value)
     UIDropDownMenu_SetText(dropdown, (value == "") and "—" or value)
 
     return dropdown
 end
+
 
 local function initAnchorAssignments()
     CreateAnchorDropdown(SnugUI.panels.general, "left", -128, -58)
@@ -267,11 +269,11 @@ SlashCmdList["SnugUI"] = function()
     end
 end
 SnugUI.loginTrigger(function()
-    --C_Timer.After(0.1, function()
-        if SnugUI.settings.debug then
+    if SnugUI.settings.debug then
+        C_Timer.After(1, function()
             SnugUI.frames.BG:Show()
-        end
-    --end)
+        end)
+    end
 end)
 
 SnugUI.buttons.apply:SetScript("OnClick", function()
@@ -385,6 +387,54 @@ thankyou:SetJustifyV("TOP")
 thankyou:SetTextColor(1, 1, 1)
 thankyou:SetText("And a general thanks to all of you who take the time to build something for the game you love (and leave helpful comments). This is the first time I have tried anything like this, without the vast endeavors of this community I would not have made it very far. --|cff00ccffSnugglelumps|r")
 
+---<=======================================================================================================>---<<3.9 QOL
+
+local function createQuestButton()
+    local label1 = SnugUI.panels.qol:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    label1:SetPoint("LEFT", SnugUI.panels.qol, "TOPLEFT", 10, -15)
+    label1:SetText("Quest Item Button")
+
+    local checkbox = CreateFrame("CheckButton", nil, SnugUI.panels.qol, "ChatConfigCheckButtonTemplate")
+    checkbox:SetPoint("LEFT", label1, "RIGHT", 4, 0)
+    checkbox:SetChecked(SnugUI.settings.qol.questButton)
+    checkbox:SetHitRectInsets(0, 0, 0, 0)
+
+    checkbox:SetScript("OnClick", function(self)
+        local enabled = self:GetChecked()
+        SnugUI.settings.qol.questButton = enabled
+        SnugUI.functions.reloadUIRequest()
+    end)
+end
+
+local function createQuestHotkey()
+    local label2 = SnugUI.panels.qol:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    label2:SetPoint("LEFT", SnugUI.panels.qol, "TOPLEFT", 300, -15)
+    label2:SetText("Hotkey:")
+
+    local editBox = CreateFrame("EditBox", nil, SnugUI.panels.qol, "InputBoxTemplate")
+    editBox:SetSize(30, 20)
+    editBox:SetPoint("LEFT", label2, "RIGHT", 4, 0)
+    editBox:SetAutoFocus(false)
+    editBox:SetMaxLetters(1)
+
+    -- Initialize with current setting
+    editBox:SetText(SnugUI.settings.qol.questHotkey or "")
+
+    editBox:SetScript("OnTextChanged", function(self)
+        local char = self:GetText():sub(1, 1):upper()
+        self:SetText(char) -- ensure only one character stays
+        SnugUI.settings.qol.questHotkey = char
+    end)
+
+    editBox:SetScript("OnEscapePressed", function(self)
+        self:ClearFocus()
+    end)
+
+    editBox:SetScript("OnEnterPressed", function(self)
+        self:ClearFocus()
+    end)
+end
+
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
     -- Initialization
@@ -393,5 +443,6 @@ SnugUI.loginTrigger(function()
     initMinimapSettings()
     CreateTabSystemDropdown()
     setDetailsExportBox()
-    --buttonTooltips()
+    createQuestButton()
+    createQuestHotkey()
 end)
