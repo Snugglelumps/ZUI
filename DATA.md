@@ -2,24 +2,22 @@
 
 📂 SnugUI
 ├── ⚙️ settings (SavedVariables)
-│   ├── ~~anchorAssignments~~
-│   │   ├── ~~left~~
-│   │   └── ~~right~~
-│   ├── ~~anchorWidth~~
-│   ├── ~~anchorHeight~~
 │   ├── anchors
 │   │   ├── leftAssignment
 │   │   ├── rightAssignment
 │   │   ├── width
 │   │   └── height
 │   ├── tabSystem
+│   ├── chat
+│   │   ├── tabStyle
+│   │   └──
 │   ├── ~~minimapStyle~~
 │   ├── minimap
 │   │   ├── style - toggles between SnugUI and a Blizzard-esq minimap
 │   │   ├── scale - Will be static value for SnugUI, slider for Blizzard-esq
 │   │   ├── lockTracker
 │   │   ├── hideWorldMapButton
-│   │   ├── 
+│   │   ├── disableModule
 │   │   └──
 │   ├── qol
 │   │   ├── questButton 

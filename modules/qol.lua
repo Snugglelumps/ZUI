@@ -55,12 +55,12 @@ local function updateQuestItemButtons()
 end
 
 SnugUI.loginTrigger(function()
-    if SnugUI.settings.qol.questButton then
-        table.insert(SnugUI.commitRegistry, updateQuestItemButtons)
-        local f = CreateFrame("Frame")
-        f:RegisterEvent("QUEST_LOG_UPDATE")
-        f:SetScript("OnEvent", function()
-            updateQuestItemButtons()
-        end)
-    end
+    if not SnugUI.settings.qol.questButton then return end
+    C_Timer.After(4, updateQuestItemButtons) -- MONSTER delay, i hate it but its needed. blizzard is super slow creating the watchframe, and we change its position in minimap.lua. it seems like there is an amount of time after the frame is created/moved that it is not ready. essentially we wait for blizz, wait 2 seconds, move it, wait another 2 seconds.
+    table.insert(SnugUI.commitRegistry, updateQuestItemButtons)
+    local f = CreateFrame("Frame")
+    f:RegisterEvent("QUEST_LOG_UPDATE")
+    f:SetScript("OnEvent", function()
+        updateQuestItemButtons()
+    end)
 end)
