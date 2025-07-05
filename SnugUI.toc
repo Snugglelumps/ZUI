@@ -1,4 +1,6 @@
-## Interface: 40400
+## Interface:          11307    ; Vanilla Classic
+## Interface-Cata:     40400    ; Cataclysm Classic
+## Interface-Mists:    50500    ; Mists of Pandaria Classic
 ## Title: |cff66ccffSnugUI|r
 ## Notes: A clean, focused UI enhancement addon for World of Warcraft.
 ## Author: Snugglelumps
