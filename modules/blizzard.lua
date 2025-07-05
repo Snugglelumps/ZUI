@@ -10,3 +10,4 @@ SnugUI.loginTrigger(function() --probably too cautious
         end
     end)
 end)
+

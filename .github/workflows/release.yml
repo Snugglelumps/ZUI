@@ -25,4 +25,4 @@ jobs:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: "1297363"
           game_endpoint: "wow"
-          file_path: "/SnugUI-*.zip"
+          file_path: "SnugUI-*.zip"
