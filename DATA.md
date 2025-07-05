@@ -17,7 +17,7 @@
 │   │   ├── scale - Will be static value for SnugUI, slider for Blizzard-esq
 │   │   ├── lockTracker
 │   │   ├── hideWorldMapButton
-│   │   ├── 
+│   │   ├── disableModule
 │   │   └──
 │   ├── qol
 │   │   ├── questButton 

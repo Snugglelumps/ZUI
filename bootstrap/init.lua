@@ -19,7 +19,6 @@ SnugUI.settings.qol             = SnugUI.settings.qol or {}
 
 SnugUI.functions                = SnugUI.functions or {}
 
-
 -- Define settings assertion and apply via the ADDON_LOADED handler
 local function initializeSettings()
     local defaults = {
@@ -36,6 +35,7 @@ local function initializeSettings()
         },
         minimap = {
             style = "SnugUI",
+            scale = 1,
             lockTracker = true,
             hideWorldMapButton = true,
         },
@@ -67,7 +67,7 @@ f:SetScript("OnEvent", function(_, _, name)
     SnugUI.settings = SnugUISettings
     initializeSettings()
     if SnugUI.settings.reloadUI then SnugUI.settings.reloadUI = false end
-    SnugUI.settings.debug = true
+    SnugUI.settings.debug = false
 end)
 
 local loginQueue = {}

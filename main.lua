@@ -144,7 +144,7 @@ end
 local minimapStyleOptions = { "SnugUI", "Blizzard" }
 
 local function initMinimapSettings()
-    local panel = SnugUI.panels.general
+    local panel = SnugUI.panels.minimap
 
     -- Create dropdown
     local dropdown = CreateFrame("Frame", "SnugUIMinimapStyleDropdown", panel, "UIDropDownMenuTemplate")
@@ -161,9 +161,9 @@ local function initMinimapSettings()
             local info = UIDropDownMenu_CreateInfo()
             info.text = option
             info.value = option
-            info.checked = (SnugUI.settings.minimapStyle == option)
+            info.checked = (SnugUI.settings.minimap.style == option)
             info.func = function(selfArg)
-                SnugUI.settings.minimapStyle = selfArg.value
+                SnugUI.settings.minimap.style = selfArg.value
                 UIDropDownMenu_SetSelectedValue(dropdown, selfArg.value)
                 _G[dropdown:GetName() .. "Text"]:SetText(selfArg.value)
                 SnugUI.functions.reloadUIRequest()
@@ -172,14 +172,58 @@ local function initMinimapSettings()
         end
     end)
 
-    local value = SnugUI.settings.minimapStyle
+    local value = SnugUI.settings.minimap.style
     if not tContains(minimapStyleOptions, value) then
         value = "SnugUI"
-        SnugUI.settings.minimapStyle = value
+        SnugUI.settings.minimap.style = value
     end
     UIDropDownMenu_SetSelectedValue(dropdown, value)
     _G[dropdown:GetName() .. "Text"]:SetText(value)
 end
+---^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^dead soon
+
+local function initMinimapSettingsPanel2()
+    local panel = SnugUI.panels.minimap
+
+    -- Lock Tracker Checkbox
+    local lockLabel = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    lockLabel:SetPoint("TOPLEFT", 16, -16)
+    lockLabel:SetText("Lock Tracker")
+
+    local lockCheckbox = CreateFrame("CheckButton", nil, panel, "ChatConfigCheckButtonTemplate")
+    lockCheckbox:SetPoint("LEFT", lockLabel, "RIGHT", 8, 0)
+    lockCheckbox:SetChecked(SnugUI.settings.minimap.lockTracker)
+    lockCheckbox:SetScript("OnClick", function(self)
+        SnugUI.settings.minimap.lockTracker = self:GetChecked()
+        SnugUI.functions.reloadUIRequest()
+    end)
+
+    -- Hide World Map Button Checkbox
+    local hideLabel = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    hideLabel:SetPoint("TOPLEFT", lockLabel, "BOTTOMLEFT", 0, -16)
+    hideLabel:SetText("Hide World Map Button")
+
+    -- Scale Slider
+    local sliderLabel = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    sliderLabel:SetPoint("TOPLEFT", hideLabel, "BOTTOMLEFT", 0, -30)
+    sliderLabel:SetText("Minimap Scale")
+
+    local scaleSlider = CreateFrame("Slider", nil, panel, "OptionsSliderTemplate")
+    scaleSlider:SetOrientation("HORIZONTAL")
+    scaleSlider:SetSize(150, 15)
+    scaleSlider:SetPoint("TOPLEFT", sliderLabel, "BOTTOMLEFT", 0, -6)
+    scaleSlider:SetMinMaxValues(0.7750, 1.9625)
+    scaleSlider:SetValueStep(0.00625)
+    scaleSlider:SetObeyStepOnDrag(true)
+    scaleSlider:SetValue(SnugUI.settings.minimap.scale)
+
+    scaleSlider:SetScript("OnValueChanged", function(self, value)
+        SnugUI.settings.minimap.scale = value
+        SnugUI.functions.applyMinimapScale()
+    end)
+end
+
+
 
 ---<=============================================================================================>---<<3.5 Chat Settings
 local tabOptions = { "SnugUI", "Blizzard" }
@@ -445,4 +489,5 @@ SnugUI.loginTrigger(function()
     setDetailsExportBox()
     createQuestButton()
     createQuestHotkey()
+    initMinimapSettingsPanel2()
 end)

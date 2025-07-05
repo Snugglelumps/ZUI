@@ -1,11 +1,31 @@
 local _, SnugUI = ...
 
--- Formats the minimap to be similarly styled to ZUI
-local function SnugUIMinimapFormat()
-    Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8x8")
-    Minimap:SetScale(1.40625)
+SnugUI.frames.minimapBorder = CreateFrame("Frame", nil, Minimap, "BackdropTemplate")
+local function SnugUIMinimap()
+    local toHide = {
+            MinimapBorder,
+            MinimapBorderTop,
+            MinimapZoneTextButton,
+            MinimapZoneText,
+            MinimapZoomIn,
+            MinimapZoomOut,
+            MiniMapTrackingButtonBorder,
+            MiniMapTrackingBackground,
+            MiniMapWorldMapButton, -- ill maybe make this a setting, its just such an ugly frame
+        }
+    for _, frame in ipairs(toHide) do
+        if frame then frame:Hide() end
+    end
+    -- Remove clocks background textures
+    for i = 1, TimeManagerClockButton:GetNumRegions() do
+        local region = select(i, TimeManagerClockButton:GetRegions())
+        if region and region:GetObjectType() == "Texture" then
+            region:SetTexture(nil)
+        end
+    end
 
     -- Add a 1px black border around the minimap
+    Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8x8")
     local border = CreateFrame("Frame", nil, Minimap, "BackdropTemplate")
     border:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -0.5, 0.5)
     border:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 0.5, -0.5)
@@ -15,114 +35,93 @@ local function SnugUIMinimapFormat()
     })
     border:SetBackdropBorderColor(0, 0, 0, 1)
     border:SetFrameStrata("LOW")
+    border:Show()
 
-    -- Hide Unwanted Minimap Elements
-    local toHide = {
-        MinimapBorder,
-        MinimapBorderTop,
-        MinimapZoneTextButton,
-        MinimapZoneText,
-        MinimapZoomIn,
-        MinimapZoomOut,
-        MiniMapTrackingButtonBorder,
-        MiniMapTrackingBackground,
-    }
-    for _, frame in ipairs(toHide) do
-        if frame then frame:Hide() end
-    end
-
-    -- Hide world map button safely (waits until it exists)
-    local waitFrame = CreateFrame("Frame")
-    waitFrame:SetScript("OnUpdate", function(self)
-        local btn = _G["MiniMapWorldMapButton"]
-        if btn then
-            btn:Hide()
-            self:SetScript("OnUpdate", nil)
-        end
-    end)
-
-    -- Reposition minimap cluster
-    MinimapCluster:ClearAllPoints()
-    MinimapCluster:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -30, 15)
-
-    -- Move GameTimeFrame to the top right of the minimap
+    --#fuckthecluster
+    WatchFrame:ClearAllPoints()
+    WatchFrame:SetPoint("TOP", Minimap, "BOTTOMRIGHT", 0, -25)
+    WatchFrame:SetClampedToScreen(true)
+    BuffFrame:ClearAllPoints()
+    BuffFrame:SetPoint("RIGHT", Minimap, "TOPLEFT", -25, -25)
     if GameTimeFrame then
         GameTimeFrame:ClearAllPoints()
         GameTimeFrame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 0, 0)
+        local size = (SnugUI.settings.minimap.scale * .7)
+        GameTimeFrame:SetScale(size)
     end
-
-    -- Quest Tracker (WatchFrame)
-    if WatchFrame then
-        WatchFrame:ClearAllPoints()
-        WatchFrame:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 20, -20)
-        WatchFrame:SetClampedToScreen(true)
-        WatchFrame:SetMovable(true)
-        WatchFrame:SetUserPlaced(true)
+    if TimeManagerClockButton then
+    TimeManagerClockButton:ClearAllPoints()
+    TimeManagerClockButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -15, -8)
     end
-end
-
-local function SnugUIMinimapClock()
-        if TimeManagerClockButton then
-        TimeManagerClockButton:ClearAllPoints()
-        TimeManagerClockButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -15, -8)
-
-        -- Remove background textures
-        for i = 1, TimeManagerClockButton:GetNumRegions() do
-            local region = select(i, TimeManagerClockButton:GetRegions())
-            if region and region:GetObjectType() == "Texture" then
-                region:SetTexture(nil)
-            end
-        end
-
-        if TimeManagerClockTicker then
-            TimeManagerClockTicker:SetScale(1.1)
-        end
-    end
-end
-
--- forces the tracking icon to always be the magnifying glass
-local function SnugUIMinimapTracker()
     if MiniMapTracking then
-    MiniMapTracking:ClearAllPoints()
-    MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 6, -7)
-        if MiniMapTrackingIcon then
-            MiniMapTrackingIcon:SetTexture(136460)
-            local inHook = false
-            hooksecurefunc(MiniMapTrackingIcon, "SetTexture", function(self, texture)
-                if inHook then return end  -- Prevent recursion
-                if texture ~= 136460 then
-                    inHook = true
-                    self:SetTexture(136460)
-                    inHook = false
-                end
-            end)
-        end
+        MiniMapTracking:ClearAllPoints()
+        MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 6, -7)
+    end
+    -- the math here is kinda random. the intent was to derive the width of the negative space around the
+    -- minimap as it scales, and use that to calculate our offsets. the scaling is a bit of a black box to
+    -- me, for now ive settled on some random numbers doing the job. if you know the answer hmu.
+    offset = -math.abs(30 - ( 8 * SnugUI.settings.minimap.scale)  )
+    Minimap:ClearAllPoints()
+    Minimap:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", offset, offset)
+    Minimap:SetClampedToScreen(false)
+    MinimapCluster:SetScale(1)
+end
+
+local function blizzardMinimap()
+    Minimap:SetMaskTexture("interface\\masks\\circlemaskscalable")
+    Minimap:SetScale(1)
+end
+
+function applyMinimapStyle()
+    if SnugUI.settings.minimap.style == "SnugUI" then
+        SnugUIMinimap()
+    end
+    if SnugUI.settings.minimap.style == "Blizzard" then
+        blizzardMinimap()
     end
 end
 
-local function SnugUIMinimapHooks() -- thought Id have more than one haha
-    hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", function() -- Repositions buff frame
-        BuffFrame:ClearAllPoints()
-        BuffFrame:SetPoint("TOPRIGHT", MinimapCluster, "TOPLEFT", 0, -29)
-    end)
 
+local previousScale
+SnugUI.functions.applyMinimapScale = function()
+    local currentScale = SnugUI.settings.minimap.scale
+    if previousScale == currentScale then return end
+    if SnugUI.settings.minimap.style == "SnugUI" then
+        Minimap:SetScale(currentScale)
+    end
+    if SnugUI.settings.minimap.style == "Blizzard" then
+        MinimapCluster:SetScale(currentScale)
+    end
+    previousScale = currentScale
 end
 
-local function applyMinimapStyle()
-    local style = SnugUI.settings.minimapStyle
-    if style == "SnugUI" then
-        SnugUIMinimapFormat()
-        SnugUIMinimapClock()
-        SnugUIMinimapHooks()
-        SnugUIMinimapTracker()
-    elseif style == "Blizzard" then
-        Minimap:SetMaskTexture("interface\\masks\\circlemaskscalable")
-        Minimap:SetScale(1)
+local function lockMinimapTracker()
+    if MiniMapTrackingIcon then
+        MiniMapTrackingIcon:SetTexture(136460)
+        local inHook = false
+        hooksecurefunc(MiniMapTrackingIcon, "SetTexture", function(self, texture)
+            if inHook then return end  -- Prevent recursion
+            if texture ~= 136460 then
+                inHook = true
+                self:SetTexture(136460)
+                inHook = false
+            end
+        end)
     end
 end
 
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
-    -- Initialization
-    applyMinimapStyle()
+    C_Timer.After(0.1, applyMinimapStyle)
+    C_Timer.After(0.1, function()
+        SnugUI.functions.applyMinimapScale()
+    end)
+    table.insert(SnugUI.commitRegistry, function()
+        SnugUI.functions.applyMinimapScale()
+    end)
+end)
+
+SnugUI.loginTrigger(function()
+    if not SnugUI.settings.minimap.lockTracker then return end
+    lockMinimapTracker()
 end)

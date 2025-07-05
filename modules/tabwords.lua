@@ -157,16 +157,17 @@ end
 
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
-    local system = SnugUI.settings.chat.tabStyle
-    if system == "SnugUI" then
-        anchorTabWords()
-        RefreshTabWords()
-        initTabWords()
-        HideGeneralDockManager()
-        debugFrame_TabWords()
-        table.insert(SnugUI.commitRegistry, anchorTabWords)
-        table.insert(SnugUI.commitRegistry, RefreshTabWords)
-    elseif system == "Blizzard" then
-        hideBlizzardChatTabStuff()
-    end
+    if SnugUI.settings.chat.tabStyle ~= "SnugUI" then return end
+    anchorTabWords()
+    RefreshTabWords()
+    initTabWords()
+    HideGeneralDockManager()
+    debugFrame_TabWords()
+    table.insert(SnugUI.commitRegistry, anchorTabWords)
+    table.insert(SnugUI.commitRegistry, RefreshTabWords)
+end)
+
+SnugUI.loginTrigger(function()
+    if SnugUI.settings.chat.tabStyle ~= "Blizzard" then return end
+    hideBlizzardChatTabStuff()
 end)
