@@ -20,8 +20,9 @@ jobs:
           args: -g classic -n "SnugUI"
 
       - name: Upload to CurseForge
-        uses: LIMGitHub/curseforge-upload@v1
+        uses: itsmeow/curseforge-upload@v3
         with:
           token: ${{ secrets.CF_API_TOKEN }}
-          project-id: 1297363
+          project-id: "1297363"
+          game_endpoint: "wow"
           file-path: ./releases/SnugUI-*.zip
