@@ -23,6 +23,6 @@ jobs:
         uses: itsmeow/curseforge-upload@v3
         with:
           token: ${{ secrets.CF_API_TOKEN }}
-          project-id: "1297363"
+          project_id: "1297363"
           game_endpoint: "wow"
-          file-path: ./releases/SnugUI-*.zip
+          file_path: ./releases/SnugUI-*.zip
