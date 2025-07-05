@@ -3,12 +3,12 @@ local _, SnugUI = ...
 local TabWordsFrame = CreateFrame("Frame", "ZacsTabWordsFrame", UIParent, "BackdropTemplate")
 
 local function anchorTabWords()
-    if SnugUISettings.anchorAssignments.left == "Chat" then
+    if SnugUI.settings.anchors.leftAssignment == "Chat" then
         TabWordsFrame:ClearAllPoints()
         TabWordsFrame:SetPoint("TOPLEFT", ChatFrame1, "TOPRIGHT", 1, 2)
         TabWordsFrame:SetSize(100, 200)
         end
-    if SnugUISettings.anchorAssignments.right == "Chat" then
+    if SnugUI.settings.anchors.rightAssignment == "Chat" then
         TabWordsFrame:ClearAllPoints()
         TabWordsFrame:SetPoint("TOPRIGHT", ChatFrame1, "TOPLEFT", 1, 2)
         TabWordsFrame:SetSize(100, 200)
@@ -53,11 +53,11 @@ local function RefreshTabWords()
         local text = btn.text
         text:ClearAllPoints()
 
-        if SnugUISettings.anchorAssignments.left == "Chat" then
+        if SnugUI.settings.anchors.leftAssignment == "Chat" then
             text:SetPoint("TOPLEFT", btn, "TOPLEFT", -6, 8)
             text:SetPoint("RIGHT", btn, "RIGHT", 0, 0)
             text:SetJustifyH("LEFT")
-        elseif SnugUISettings.anchorAssignments.right == "Chat" then
+        elseif SnugUI.settings.anchors.rightAssignment == "Chat" then
             text:SetPoint("TOPRIGHT", btn, "TOPRIGHT", 6, 8)
             text:SetPoint("LEFT", btn, "LEFT", 0, 0)
             text:SetJustifyH("RIGHT")
@@ -157,7 +157,7 @@ end
 
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
-    local system = SnugUI.settings.tabSystem
+    local system = SnugUI.settings.chat.tabStyle
     if system == "SnugUI" then
         anchorTabWords()
         RefreshTabWords()

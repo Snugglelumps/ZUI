@@ -199,9 +199,9 @@ local function CreateTabSystemDropdown()
             local info = UIDropDownMenu_CreateInfo()
             info.text = option
             info.value = option
-            info.checked = (SnugUI.settings.tabSystem == option)
+            info.checked = (SnugUI.settings.chat.tabStyle == option)
             info.func = function(selfArg)
-                SnugUI.settings.tabSystem = selfArg.value
+                SnugUI.settings.chat.tabStyle = selfArg.value
                 UIDropDownMenu_SetSelectedValue(dropdown, selfArg.value)
                 _G[dropdown:GetName() .. "Text"]:SetText(selfArg.value)
                 SnugUI.functions.reloadUIRequest()
@@ -210,10 +210,10 @@ local function CreateTabSystemDropdown()
         end
     end)
 
-    local value = SnugUI.settings.tabSystem
+    local value = SnugUI.settings.chat.tabStyle
     if not tContains(tabOptions, value) then
         value = "SnugUI"
-        SnugUI.settings.tabSystem = value
+        SnugUI.settings.chat.tabStyle = value
     end
     UIDropDownMenu_SetSelectedValue(dropdown, value)
     _G[dropdown:GetName() .. "Text"]:SetText(value)

@@ -10,18 +10,23 @@ SnugUI.frames         = SnugUI.frames or {} -- mostly background frames
 SnugUI.panels         = SnugUI.panels or {} -- content panels for settings UI
 SnugUI.buttons        = SnugUI.buttons or {}
 SnugUI.commitRegistry = SnugUI.commitRegistry or {}
-SnugUI.settings.anchorAssignments = SnugUI.settings.anchorAssignments or {}
+--SnugUI.settings.anchorAssignments = SnugUI.settings.anchorAssignments or {}
 
 SnugUI.settings.anchors         = SnugUI.settings.anchors or {}
+SnugUI.settings.chat            = SnugUI.settings.chat or {}
 SnugUI.settings.minimap         = SnugUI.settings.minimap or {}
 SnugUI.settings.qol             = SnugUI.settings.qol or {}
+
 SnugUI.functions                = SnugUI.functions or {}
 
 
 -- Define settings assertion and apply via the ADDON_LOADED handler
 local function initializeSettings()
     local defaults = {
-        tabSystem         = "SnugUI",
+        --tabSystem         = "SnugUI",
+        chat = {
+            tabstyle = "SnugUI",
+        },
         minimapStyle      = "SnugUI", --old defaults end
         anchors = {
             width = 420,
