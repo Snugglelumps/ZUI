@@ -7,11 +7,10 @@
 │   │   ├── rightAssignment
 │   │   ├── width
 │   │   └── height
-│   ├── tabSystem
+│   ├── ~~tabSystem~~
 │   ├── chat
 │   │   ├── tabStyle
 │   │   └──
-│   ├── ~~minimapStyle~~
 │   ├── minimap
 │   │   ├── style - toggles between SnugUI and a Blizzard-esq minimap
 │   │   ├── scale - Will be static value for SnugUI, slider for Blizzard-esq

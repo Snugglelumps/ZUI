@@ -1,0 +1,18 @@
+# .pkgmeta
+externals:
+  libs/LibStub:
+    url: https://repos.wowace.com/wow/libstub/trunk
+    tag: latest
+
+enable-nolib-creation: no
+manual-changelog: yes
+
+ignore:
+  - .git/**
+  - .github/**
+  - .gitignore
+  - .pkgmeta
+  - CHANGELOG.md
+  - DATA.md
+  - LICENSE
+  - README.md

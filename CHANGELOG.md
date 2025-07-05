@@ -35,3 +35,5 @@ ___
 * Added QOL panel and new quest item bar feature
 
 ## 1.2 
+* Rebuilt minimap
+* Ready for GitHub Actions
