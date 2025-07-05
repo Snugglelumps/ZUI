@@ -1,14 +1,14 @@
-local _, zui = ...
+local _, SnugUI = ...
 -- Create a frame to hold the clickable tab words, positioned to the right of the chat box
 local TabWordsFrame = CreateFrame("Frame", "ZacsTabWordsFrame", UIParent, "BackdropTemplate")
 
 local function anchorTabWords()
-    if ZUISettings.anchorAssignments.left == "Chat" then
+    if SnugUISettings.anchorAssignments.left == "Chat" then
         TabWordsFrame:ClearAllPoints()
         TabWordsFrame:SetPoint("TOPLEFT", ChatFrame1, "TOPRIGHT", 1, 2)
         TabWordsFrame:SetSize(100, 200)
         end
-    if ZUISettings.anchorAssignments.right == "Chat" then
+    if SnugUISettings.anchorAssignments.right == "Chat" then
         TabWordsFrame:ClearAllPoints()
         TabWordsFrame:SetPoint("TOPRIGHT", ChatFrame1, "TOPLEFT", 1, 2)
         TabWordsFrame:SetSize(100, 200)
@@ -17,13 +17,13 @@ end
 
 -- Dev-only: semi-transparent black background for visual dev
 local function debugFrame_TabWords()
-    if zui.settings.debug then
+    if SnugUI.settings.debug then
         TabWordsFrame:SetBackdrop({ bgFile = "Interface/Tooltips/UI-Tooltip-Background" })
         TabWordsFrame:SetBackdropColor(0, 0, 0, .5) -- change here for alpha
     end
 end
 
-zui.tabWordButtons = {}
+SnugUI.tabWordButtons = {}
 local function RefreshTabWords()
     local shownTabs = {}
     for i = 1, NUM_CHAT_WINDOWS do
@@ -39,25 +39,25 @@ local function RefreshTabWords()
 
     for _, info in ipairs(shownTabs) do
         local tab, idx = info.tab, info.index
-        local btn = zui.tabWordButtons[btnIndex]
+        local btn = SnugUI.tabWordButtons[btnIndex]
 
         if not btn then
             btn = CreateFrame("Button", nil, TabWordsFrame)
             local text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormal")
             text:SetFont(GameFontNormal:GetFont(), 16)
             btn.text = text
-            zui.tabWordButtons[btnIndex] = btn
+            SnugUI.tabWordButtons[btnIndex] = btn
         end
 
         -- Anchor and justification based on Chat anchor assignment
         local text = btn.text
         text:ClearAllPoints()
 
-        if ZUISettings.anchorAssignments.left == "Chat" then
+        if SnugUISettings.anchorAssignments.left == "Chat" then
             text:SetPoint("TOPLEFT", btn, "TOPLEFT", -6, 8)
             text:SetPoint("RIGHT", btn, "RIGHT", 0, 0)
             text:SetJustifyH("LEFT")
-        elseif ZUISettings.anchorAssignments.right == "Chat" then
+        elseif SnugUISettings.anchorAssignments.right == "Chat" then
             text:SetPoint("TOPRIGHT", btn, "TOPRIGHT", 6, 8)
             text:SetPoint("LEFT", btn, "LEFT", 0, 0)
             text:SetJustifyH("RIGHT")
@@ -82,13 +82,13 @@ local function RefreshTabWords()
     end
 
     -- Hide unused buttons
-    for i = btnIndex, #zui.tabWordButtons do
-        zui.tabWordButtons[i]:Hide()
+    for i = btnIndex, #SnugUI.tabWordButtons do
+        SnugUI.tabWordButtons[i]:Hide()
     end
 end
 
 local function initTabWords() -- script setup for tabwords
-    for _, btn in ipairs(zui.tabWordButtons) do
+    for _, btn in ipairs(SnugUI.tabWordButtons) do
         btn:SetSize(180, 20)
         btn:RegisterForClicks("AnyUp")
         btn:SetAlpha(0)
@@ -98,7 +98,7 @@ local function initTabWords() -- script setup for tabwords
         end)
         -- Define mouse enter behavior to highlight button
         btn:SetScript("OnEnter", function(self)
-            for _, b in ipairs(zui.tabWordButtons) do
+            for _, b in ipairs(SnugUI.tabWordButtons) do
                 if b:IsShown() then
                     UIFrameFadeIn(b, 0.25, b:GetAlpha(), 1)
                 end
@@ -107,7 +107,7 @@ local function initTabWords() -- script setup for tabwords
         end)
         -- Define mouse leave behavior to fade button
         btn:SetScript("OnLeave", function(self)
-            for _, b in ipairs(zui.tabWordButtons) do
+            for _, b in ipairs(SnugUI.tabWordButtons) do
                 if b:IsShown() then
                     UIFrameFadeOut(b, 1, b:GetAlpha(), 0)
                 end
@@ -117,8 +117,8 @@ local function initTabWords() -- script setup for tabwords
     end
         -- Hide any unused buttons
     local btnIndex = 1
-    for i = btnIndex, #zui.tabWordButtons do
-        zui.tabWordButtons[i]:Hide()
+    for i = btnIndex, #SnugUI.tabWordButtons do
+        SnugUI.tabWordButtons[i]:Hide()
     end
 end
 
@@ -156,16 +156,16 @@ for _, funcName in ipairs({"FCF_DockUpdate", "FCF_OpenNewWindow", "FCF_Close"}) 
 end
 
 ---<===========================================================================================================>---<<AUX
-zui.loginTrigger(function()
-    local system = zui.settings.tabSystem
-    if system == "ZUI" then
+SnugUI.loginTrigger(function()
+    local system = SnugUI.settings.tabSystem
+    if system == "SnugUI" then
         anchorTabWords()
         RefreshTabWords()
         initTabWords()
         HideGeneralDockManager()
         debugFrame_TabWords()
-        table.insert(zui.commitRegistry, anchorTabWords)
-        table.insert(zui.commitRegistry, RefreshTabWords)
+        table.insert(SnugUI.commitRegistry, anchorTabWords)
+        table.insert(SnugUI.commitRegistry, RefreshTabWords)
     elseif system == "Blizzard" then
         hideBlizzardChatTabStuff()
     end

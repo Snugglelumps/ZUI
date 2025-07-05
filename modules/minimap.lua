@@ -1,7 +1,7 @@
-local _, zui = ...
+local _, SnugUI = ...
 
 -- Formats the minimap to be similarly styled to ZUI
-local function ZUIMinimapFormat()
+local function SnugUIMinimapFormat()
     Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8x8")
     Minimap:SetScale(1.40625)
 
@@ -61,7 +61,7 @@ local function ZUIMinimapFormat()
     end
 end
 
-local function ZUIMinimapClock()
+local function SnugUIMinimapClock()
         if TimeManagerClockButton then
         TimeManagerClockButton:ClearAllPoints()
         TimeManagerClockButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -15, -8)
@@ -81,7 +81,7 @@ local function ZUIMinimapClock()
 end
 
 -- forces the tracking icon to always be the magnifying glass
-local function ZUIMinimapTracker()
+local function SnugUIMinimapTracker()
     if MiniMapTracking then
     MiniMapTracking:ClearAllPoints()
     MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 6, -7)
@@ -100,7 +100,7 @@ local function ZUIMinimapTracker()
     end
 end
 
-local function ZUIMinimapHooks() -- thought Id have more than one haha
+local function SnugUIMinimapHooks() -- thought Id have more than one haha
     hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", function() -- Repositions buff frame
         BuffFrame:ClearAllPoints()
         BuffFrame:SetPoint("TOPRIGHT", MinimapCluster, "TOPLEFT", 0, -29)
@@ -109,12 +109,12 @@ local function ZUIMinimapHooks() -- thought Id have more than one haha
 end
 
 local function applyMinimapStyle()
-    local style = zui.settings.minimapStyle
-    if style == "ZUI" then
-        ZUIMinimapFormat()
-        ZUIMinimapClock()
-        ZUIMinimapHooks()
-        ZUIMinimapTracker()
+    local style = SnugUI.settings.minimapStyle
+    if style == "SnugUI" then
+        SnugUIMinimapFormat()
+        SnugUIMinimapClock()
+        SnugUIMinimapHooks()
+        SnugUIMinimapTracker()
     elseif style == "Blizzard" then
         Minimap:SetMaskTexture("interface\\masks\\circlemaskscalable")
         Minimap:SetScale(1)
@@ -122,7 +122,7 @@ local function applyMinimapStyle()
 end
 
 ---<===========================================================================================================>---<<AUX
-zui.loginTrigger(function()
+SnugUI.loginTrigger(function()
     -- Initialization
     applyMinimapStyle()
 end)

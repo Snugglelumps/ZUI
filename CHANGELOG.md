@@ -24,6 +24,10 @@ This is the phase where I build stuff, hate it, and rebuild it. There is way too
 * Then I deleted INDEX.md, I added it to the README.md
 
 ___
-## 1. ZUI Launched
+## 1. ~~ZUI~~ Launched
 * Disabled debug, and removed erroneous debugging lines
-* Reformatted file structure in preparation for direct to distributor pipeline
+
+## 1.1 SnugUI it is, ZUI was taken lol.
+* Set up git automate
+* Fixed a nil compare in the anchor dimension logic, improved the logic to bound based off UIParent dims.
+* Moved global dropdown frames into namespace

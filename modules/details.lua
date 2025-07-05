@@ -1,13 +1,15 @@
-local _, zui = ...
+local _, SnugUI = ...
 
 local function GetAnchorTarget()
-    local asgn = zui.settings.anchorAssignments
-    if not asgn then return nil end
+    local anchors = SnugUI.settings.anchors
+    if not anchors then return nil end
 
-    if (asgn.left == "Details!" and zui.frames.leftAnchor) then
-        return zui.frames.leftAnchor
-    elseif (asgn.right == "Details!" and zui.frames.rightAnchor) then
-        return zui.frames.rightAnchor end
+    if (anchors.leftAssignment == "Details!" and SnugUI.frames.leftAnchor) then
+        return SnugUI.frames.leftAnchor
+    elseif (anchors.rightAssignment == "Details!" and SnugUI.frames.rightAnchor) then
+        return SnugUI.frames.rightAnchor
+    end
+
     return nil
 end
 
@@ -29,7 +31,7 @@ local function AnchorDetailsToAssignedAnchor()
 end
 
 ---<===========================================================================================================>---<<AUX
-zui.loginTrigger(function()
+SnugUI.loginTrigger(function()
     -- Initialization
     AnchorDetailsToAssignedAnchor()
 
@@ -40,5 +42,5 @@ zui.loginTrigger(function()
         anchor.care = true
     end
     -- Commit Registry
-    table.insert(zui.commitRegistry, AnchorDetailsToAssignedAnchor)
+    table.insert(SnugUI.commitRegistry, AnchorDetailsToAssignedAnchor)
 end)

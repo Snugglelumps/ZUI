@@ -1,14 +1,14 @@
-local _, zui = ...
+local _, SnugUI = ...
 
-ZUISettings = ZUISettings or {}
-zui.settings = ZUISettings
+SnugUISettings = SnugUISettings or {}
+SnugUI.settings = SnugUISettings
 
 ---<==========================================================================================>---<<3.1 Reload Indicator
-function ShowReloadUIIndicator()
-    zui.settings.reloadUI = zui.settings.reloadUI or false
-    if zui.settings.reloadUI then return end
+function SnugUI.functions.reloadUIRequest()
+    SnugUI.settings.reloadUI = SnugUI.settings.reloadUI or false
+    if SnugUI.settings.reloadUI then return end
 
-    local reloadButton = zui.buttons.reload
+    local reloadButton = SnugUI.buttons.reload
     if not reloadButton then return end
 
     if not reloadButton.reloadNote then
@@ -20,11 +20,11 @@ function ShowReloadUIIndicator()
 
     reloadButton.reloadNote:Show()
 
-    zui.settings.reloadUI = true
+    SnugUI.settings.reloadUI = true
 end
 ---<=========================================================================================>---<<3.2 Anchor Dimensions
 local function initAnchorDimensions()
-    local panel = zui.panels.general
+    local panel = SnugUI.panels.general
     local UIclientWidth, UIclientHeight = UIParent:GetWidth(), UIParent:GetHeight()
 
     local widthInput = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
@@ -32,17 +32,17 @@ local function initAnchorDimensions()
     widthInput:SetPoint("TOPLEFT", panel, "TOPLEFT", 108, -60)
     widthInput:SetAutoFocus(false)
     widthInput:SetNumeric(true)
-    widthInput:SetText(tostring(zui.settings.anchorWidth))
+    widthInput:SetText(tostring(SnugUI.settings.anchors.width))
     widthInput:SetScript("OnTextChanged", function(self)
         local value = tonumber(self:GetText())
         if not value then
             return -- do nothing if input is empty or not a number
         end
         if value > math.floor(0.5 + UIclientWidth / 2) then
-            zui.settings.anchorWidth = math.floor(0.5 + UIclientWidth / 2)
-            widthInput:SetText(tostring(zui.settings.anchorWidth))
+            SnugUI.settings.anchors.width = math.floor(0.5 + UIclientWidth / 2)
+            widthInput:SetText(tostring(SnugUI.settings.anchors.width))
         elseif value >= 1 then
-            zui.settings.anchorWidth = value
+            SnugUI.settings.anchors.width = value
         end
     end)
     local widthLabel = widthInput:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -54,24 +54,24 @@ local function initAnchorDimensions()
     heightInput:SetPoint("TOPLEFT", panel, "TOPLEFT", 32, -60)
     heightInput:SetAutoFocus(false)
     heightInput:SetNumeric(true)
-    heightInput:SetText(tostring(zui.settings.anchorHeight))
+    heightInput:SetText(tostring(SnugUI.settings.anchors.height))
     heightInput:SetScript("OnTextChanged", function(self)
         local value = tonumber(self:GetText())
         if not value then
             return -- do nothing if input is empty or not a number
         end
         if value > math.floor(0.5 + UIclientHeight) then
-            zui.settings.anchorHeight = math.floor(0.5 + UIclientHeight)
-            heightInput:SetText(tostring(zui.settings.anchorHeight))
+            SnugUI.settings.anchors.height = math.floor(0.5 + UIclientHeight)
+            heightInput:SetText(tostring(SnugUI.settings.anchors.height))
         elseif value >= 1 then
-            zui.settings.anchorHeight = value
+            SnugUI.settings.anchors.height = value
         end
     end)
     local heightLabel = heightInput:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     heightLabel:SetPoint("BOTTOM", heightInput, "TOP", -3, 4)
     heightLabel:SetText("Height")
 
-    if zui.settings.debug then
+    if SnugUI.settings.debug then
         local pw, ph = GetPhysicalScreenSize()
         local uw, uh = UIParent:GetWidth(), UIParent:GetHeight()
         print("Physical:", pw, ph)
@@ -82,19 +82,20 @@ end
 ---<========================================================================================>---<<3.3 Anchor Assignments
 local anchorOptions = { "", "Chat", "Details!" }
 
-local function CreateAnchorDropdown(parent, key, x, y)
-    zui.dropdowns = zui.dropdowns or {}
+local function CreateAnchorDropdown(parent, sideKey, x, y)
+    SnugUI.dropdowns = SnugUI.dropdowns or {}
+    local settings = SnugUI.settings.anchors
 
     -- Dropdown
-    local dropdown = CreateFrame("Frame", "ZUIAnchorDropdown" .. key, parent, "UIDropDownMenuTemplate")
+    local dropdown = CreateFrame("Frame", "SnugUIAnchorDropdown" .. sideKey, parent, "UIDropDownMenuTemplate")
     dropdown:SetPoint("TOPRIGHT", parent, "TOPRIGHT", x, y)
     UIDropDownMenu_SetWidth(dropdown, 90)
-    zui.dropdowns[key] = dropdown
+    SnugUI.dropdowns[sideKey] = dropdown
 
     -- Label
     local label = dropdown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     label:SetPoint("BOTTOM", dropdown, "TOP", 0, 4)
-    label:SetText((key == "left") and "Left Anchor" or "Right Anchor")
+    label:SetText((sideKey == "left") and "Left Anchor" or "Right Anchor")
 
     -- Menu Initialization
     UIDropDownMenu_Initialize(dropdown, function(self, level)
@@ -102,50 +103,51 @@ local function CreateAnchorDropdown(parent, key, x, y)
             local info = UIDropDownMenu_CreateInfo()
             info.text = (option == "") and "—" or option
             info.value = option
-            info.checked = (zui.settings.anchorAssignments[key] == option)
+            info.checked = (settings[sideKey .. "Assignment"] == option)
             info.func = function(selfArg)
-                local otherKey = (key == "left") and "right" or "left"
-                if zui.settings.anchorAssignments[otherKey] == selfArg.value then
-                    zui.settings.anchorAssignments[otherKey] = ""
-                    local otherDrop = zui.dropdowns[otherKey]
+                local otherKey = (sideKey == "left") and "right" or "left"
+                if settings[otherKey .. "Assignment"] == selfArg.value then
+                    settings[otherKey .. "Assignment"] = ""
+                    local otherDrop = SnugUI.dropdowns[otherKey]
                     if otherDrop then
                         UIDropDownMenu_SetSelectedValue(otherDrop, "")
-                        _G[otherDrop:GetName() .. "Text"]:SetText("—")
+                        UIDropDownMenu_SetText(otherDrop, "—")
                     end
                 end
-                zui.settings.anchorAssignments[key] = selfArg.value
+                settings[sideKey .. "Assignment"] = selfArg.value
                 UIDropDownMenu_SetSelectedValue(dropdown, selfArg.value)
-                _G[dropdown:GetName() .. "Text"]:SetText((selfArg.value == "") and "—" or selfArg.value)
+                UIDropDownMenu_SetText(dropdown, (selfArg.value == "") and "—" or selfArg.value)
             end
             UIDropDownMenu_AddButton(info, level)
         end
     end)
 
     -- Initial Value
-    local value = zui.settings.anchorAssignments[key]
+    local value = settings[sideKey .. "Assignment"]
     if not tContains(anchorOptions, value) then
         value = ""
-        zui.settings.anchorAssignments[key] = value
+        settings[sideKey .. "Assignment"] = value
     end
     UIDropDownMenu_SetSelectedValue(dropdown, value)
-    _G[dropdown:GetName() .. "Text"]:SetText((value == "") and "—" or value)
+    UIDropDownMenu_SetText(dropdown, (value == "") and "—" or value)
 
     return dropdown
 end
 
+
 local function initAnchorAssignments()
-    CreateAnchorDropdown(zui.panels.general, "left", -128, -58)
-    CreateAnchorDropdown(zui.panels.general, "right", -10, -58)
+    CreateAnchorDropdown(SnugUI.panels.general, "left", -128, -58)
+    CreateAnchorDropdown(SnugUI.panels.general, "right", -10, -58)
 end
 
 ---<==========================================================================================>---<<3.4 Minimap Settings
-local minimapStyleOptions = { "ZUI", "Blizzard" }
+local minimapStyleOptions = { "SnugUI", "Blizzard" }
 
 local function initMinimapSettings()
-    local panel = zui.panels.general
+    local panel = SnugUI.panels.general
 
     -- Create dropdown
-    local dropdown = CreateFrame("Frame", "ZUIMinimapStyleDropdown", panel, "UIDropDownMenuTemplate")
+    local dropdown = CreateFrame("Frame", "SnugUIMinimapStyleDropdown", panel, "UIDropDownMenuTemplate")
     dropdown:SetPoint("TOPLEFT", panel, "TOPLEFT", 160, -166)
     UIDropDownMenu_SetWidth(dropdown, 120)
 
@@ -159,32 +161,32 @@ local function initMinimapSettings()
             local info = UIDropDownMenu_CreateInfo()
             info.text = option
             info.value = option
-            info.checked = (zui.settings.minimapStyle == option)
+            info.checked = (SnugUI.settings.minimapStyle == option)
             info.func = function(selfArg)
-                zui.settings.minimapStyle = selfArg.value
+                SnugUI.settings.minimapStyle = selfArg.value
                 UIDropDownMenu_SetSelectedValue(dropdown, selfArg.value)
                 _G[dropdown:GetName() .. "Text"]:SetText(selfArg.value)
-                ShowReloadUIIndicator()
+                SnugUI.functions.reloadUIRequest()
             end
             UIDropDownMenu_AddButton(info, level)
         end
     end)
 
-    local value = zui.settings.minimapStyle
+    local value = SnugUI.settings.minimapStyle
     if not tContains(minimapStyleOptions, value) then
-        value = "ZUI"
-        zui.settings.minimapStyle = value
+        value = "SnugUI"
+        SnugUI.settings.minimapStyle = value
     end
     UIDropDownMenu_SetSelectedValue(dropdown, value)
     _G[dropdown:GetName() .. "Text"]:SetText(value)
 end
 
 ---<=============================================================================================>---<<3.5 Chat Settings
-local tabOptions = { "ZUI", "Blizzard" }
+local tabOptions = { "SnugUI", "Blizzard" }
 local function CreateTabSystemDropdown()
-    local panel = zui.panels.general
+    local panel = SnugUI.panels.general
 
-    local dropdown = CreateFrame("Frame", "ZUITabSystemDropdown", panel, "UIDropDownMenuTemplate")
+    local dropdown = CreateFrame("Frame", "SnugUITabSystemDropdown", panel, "UIDropDownMenuTemplate")
     dropdown:SetPoint("TOPLEFT", panel, "TOPLEFT", 8, -166)
     UIDropDownMenu_SetWidth(dropdown, 120)
 
@@ -197,34 +199,34 @@ local function CreateTabSystemDropdown()
             local info = UIDropDownMenu_CreateInfo()
             info.text = option
             info.value = option
-            info.checked = (zui.settings.tabSystem == option)
+            info.checked = (SnugUI.settings.tabSystem == option)
             info.func = function(selfArg)
-                zui.settings.tabSystem = selfArg.value
+                SnugUI.settings.tabSystem = selfArg.value
                 UIDropDownMenu_SetSelectedValue(dropdown, selfArg.value)
                 _G[dropdown:GetName() .. "Text"]:SetText(selfArg.value)
-                ShowReloadUIIndicator()
+                SnugUI.functions.reloadUIRequest()
             end
             UIDropDownMenu_AddButton(info, level)
         end
     end)
 
-    local value = zui.settings.tabSystem
+    local value = SnugUI.settings.tabSystem
     if not tContains(tabOptions, value) then
-        value = "ZUI"
-        zui.settings.tabSystem = value
+        value = "SnugUI"
+        SnugUI.settings.tabSystem = value
     end
     UIDropDownMenu_SetSelectedValue(dropdown, value)
     _G[dropdown:GetName() .. "Text"]:SetText(value)
 end
 
 ---<============================================================================================>---<<3.6 Details! Panel
-local panel = zui.panels.details
+local panel = SnugUI.panels.details
 
 local header = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 header:SetPoint("TOPLEFT", 16, -16)
-header:SetText("Use the string below to import the ZUI profile for Details!")
+header:SetText("Use the string below to import the SnugUI profile for Details!")
 
-local scrollFrame = CreateFrame("ScrollFrame", "ZUIDetailsExportScroll", panel, "UIPanelScrollFrameTemplate")
+local scrollFrame = CreateFrame("ScrollFrame", "SnugUIDetailsExportScroll", panel, "UIPanelScrollFrameTemplate")
 scrollFrame:SetPoint("TOPLEFT", 16, -48)
 scrollFrame:SetPoint("BOTTOMRIGHT", -32, 16)
 
@@ -242,7 +244,7 @@ bg:SetBackdrop({
 bg:SetBackdropColor(0, 0, 0, 0.4)
 bg:SetBackdropBorderColor(1, 1, 1, 0.6)
 
-local exportBox = CreateFrame("EditBox", "ZUIDetailsExportBox", scrollFrame)
+local exportBox = CreateFrame("EditBox", "SnugUIDetailsExportBox", scrollFrame)
 exportBox:SetMultiLine(true)
 exportBox:SetFontObject("GameFontHighlightSmall")
 exportBox:SetWidth(400)
@@ -260,45 +262,45 @@ end
 ---<======================================================================================>---<<3.7 Buttons and Commands
 SLASH_SnugUI1 = "/sui"
 SlashCmdList["SnugUI"] = function()
-    if zui.frames.BG:IsShown() then
-        zui.frames.BG:Hide()
+    if SnugUI.frames.BG:IsShown() then
+        SnugUI.frames.BG:Hide()
     else
-        zui.frames.BG:Show()
+        SnugUI.frames.BG:Show()
     end
 end
-zui.loginTrigger(function()
-    C_Timer.After(0.1, function()
-        if zui.settings.debug then
-            zui.frames.BG:Show()
-        end
-    end)
+SnugUI.loginTrigger(function()
+    if SnugUI.settings.debug then
+        C_Timer.After(1, function()
+            SnugUI.frames.BG:Show()
+        end)
+    end
 end)
 
-zui.buttons.apply:SetScript("OnClick", function()
-    for _, func in ipairs(zui.commitRegistry) do
+SnugUI.buttons.apply:SetScript("OnClick", function()
+    for _, func in ipairs(SnugUI.commitRegistry) do
         if type(func) == "function" then
             pcall(func)
         end
     end
 end)
 local function buttonTooltips()
-    zui.buttons.apply:SetScript("OnEnter", function(self)
+    SnugUI.buttons.apply:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:SetText("Applies layout changes immediately", 1, 1, 1)
         GameTooltip:Show()
     end)
 end
 
-zui.buttons.reload:SetScript("OnClick", function()
+SnugUI.buttons.reload:SetScript("OnClick", function()
     ReloadUI()
 end)
 
-zui.buttons.close:SetScript("OnClick", function()
-    zui.frames.BG:Hide()
+SnugUI.buttons.close:SetScript("OnClick", function()
+    SnugUI.frames.BG:Hide()
 end)
 
 ---<================================================================================================>---<<3.8 About Page
-local panel = zui.panels.about
+local panel = SnugUI.panels.about
 local function CreateAboutLine(text, font, anchorTo, offsetX, offsetY)
     local line = panel:CreateFontString(nil, "OVERLAY", font or "GameFontHighlight")
     line:SetPoint("TOPLEFT", anchorTo or panel, offsetX or 16, offsetY or -16)
@@ -345,7 +347,7 @@ local function CreateThanksEntry(parent, x, y, name, author, url)
 end
 
 CreateThanksEntry(panel, 148, -96, "Masque", "StormFX", "https://www.curseforge.com/wow/addons/masque")
-CreateThanksEntry(panel, 148, -128, "Masque_SnugUI", "Snugglelumps", "https://www.curseforge.com/wow/addons/masque_zui")
+CreateThanksEntry(panel, 148, -128, "Masque_SnugUI", "Snugglelumps", "https://www.curseforge.com/wow/addons/masque_SnugUI")
 CreateThanksEntry(panel, 148, -160, "Details! Damage Meter", "Tercioo", "https://www.curseforge.com/wow/addons/details")
 CreateThanksEntry(panel, 148, -192, "Prat 3.0", "sylvanaar", "https://www.curseforge.com/wow/addons/prat-3-0")
 
@@ -385,13 +387,62 @@ thankyou:SetJustifyV("TOP")
 thankyou:SetTextColor(1, 1, 1)
 thankyou:SetText("And a general thanks to all of you who take the time to build something for the game you love (and leave helpful comments). This is the first time I have tried anything like this, without the vast endeavors of this community I would not have made it very far. --|cff00ccffSnugglelumps|r")
 
+---<=======================================================================================================>---<<3.9 QOL
+
+local function createQuestButton()
+    local label1 = SnugUI.panels.qol:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    label1:SetPoint("LEFT", SnugUI.panels.qol, "TOPLEFT", 10, -15)
+    label1:SetText("Quest Item Button")
+
+    local checkbox = CreateFrame("CheckButton", nil, SnugUI.panels.qol, "ChatConfigCheckButtonTemplate")
+    checkbox:SetPoint("LEFT", label1, "RIGHT", 4, 0)
+    checkbox:SetChecked(SnugUI.settings.qol.questButton)
+    checkbox:SetHitRectInsets(0, 0, 0, 0)
+
+    checkbox:SetScript("OnClick", function(self)
+        local enabled = self:GetChecked()
+        SnugUI.settings.qol.questButton = enabled
+        SnugUI.functions.reloadUIRequest()
+    end)
+end
+
+local function createQuestHotkey()
+    local label2 = SnugUI.panels.qol:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    label2:SetPoint("LEFT", SnugUI.panels.qol, "TOPLEFT", 300, -15)
+    label2:SetText("Hotkey:")
+
+    local editBox = CreateFrame("EditBox", nil, SnugUI.panels.qol, "InputBoxTemplate")
+    editBox:SetSize(30, 20)
+    editBox:SetPoint("LEFT", label2, "RIGHT", 4, 0)
+    editBox:SetAutoFocus(false)
+    editBox:SetMaxLetters(1)
+
+    -- Initialize with current setting
+    editBox:SetText(SnugUI.settings.qol.questHotkey or "")
+
+    editBox:SetScript("OnTextChanged", function(self)
+        local char = self:GetText():sub(1, 1):upper()
+        self:SetText(char) -- ensure only one character stays
+        SnugUI.settings.qol.questHotkey = char
+    end)
+
+    editBox:SetScript("OnEscapePressed", function(self)
+        self:ClearFocus()
+    end)
+
+    editBox:SetScript("OnEnterPressed", function(self)
+        self:ClearFocus()
+    end)
+end
+
 ---<===========================================================================================================>---<<AUX
-zui.loginTrigger(function()
+SnugUI.loginTrigger(function()
     -- Initialization
     initAnchorDimensions()
     initAnchorAssignments()
     initMinimapSettings()
     CreateTabSystemDropdown()
     setDetailsExportBox()
-    --buttonTooltips()
+    createQuestButton()
+    createQuestHotkey()
 end)

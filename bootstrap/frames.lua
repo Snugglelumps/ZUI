@@ -1,11 +1,11 @@
-local _, zui = ...
+local _, SnugUI = ...
 
 ---<===================================================================================================>---<<2.1 Anchors
 ---<==============================[Creates the right and left anchor frames. They are exposed globally via their names.]
 
 local function CreateRectangle(name, parent, x, y)
     local f = CreateFrame("Frame", name, parent or UIParent)
-    f:SetSize(zui.settings.anchorWidth, zui.settings.anchorHeight)
+    f:SetSize(SnugUI.settings.anchors.width, SnugUI.settings.anchors.height)
     f:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
     f:SetFrameStrata("BACKGROUND")
 
@@ -43,30 +43,30 @@ local function CreateRectangle(name, parent, x, y)
 end
 
 local function createAnchors()
-    local w = zui.settings.anchorWidth
-    local h = zui.settings.anchorHeight
+    local w = SnugUI.settings.anchors.width
+    local h = SnugUI.settings.anchors.height
 
     -- Create and anchor rightAnchor (bottom right of screen)
-    zui.frames.rightAnchor = CreateRectangle("ZUIRightAnchor", UIParent) -- global exposure via name, ty blizz
-    zui.frames.rightAnchor:ClearAllPoints()
-    zui.frames.rightAnchor:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -1, 1)
-    zui.frames.rightAnchor:SetSize(w, h)
-    zui.frames.rightAnchor:EnableMouse(true)
-    zui.frames.rightAnchor:SetMouseClickEnabled(false)
+    SnugUI.frames.rightAnchor = CreateRectangle("SnugUIRightAnchor", UIParent) -- global exposure via name, ty blizz
+    SnugUI.frames.rightAnchor:ClearAllPoints()
+    SnugUI.frames.rightAnchor:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -1, 1)
+    SnugUI.frames.rightAnchor:SetSize(w, h)
+    SnugUI.frames.rightAnchor:EnableMouse(true)
+    SnugUI.frames.rightAnchor:SetMouseClickEnabled(false)
 
     -- Create and anchor leftAnchor (believe it or not... bottom left of screen)
-    zui.frames.leftAnchor = CreateRectangle("ZUILeftAnchor", UIParent) -- global exposure via name
-    zui.frames.leftAnchor:ClearAllPoints()
-    zui.frames.leftAnchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 1, 1)
-    zui.frames.leftAnchor:SetSize(w, h)
-    zui.frames.leftAnchor:EnableMouse(true)
-    zui.frames.leftAnchor:SetMouseClickEnabled(false)
+    SnugUI.frames.leftAnchor = CreateRectangle("SnugUILeftAnchor", UIParent) -- global exposure via name
+    SnugUI.frames.leftAnchor:ClearAllPoints()
+    SnugUI.frames.leftAnchor:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 1, 1)
+    SnugUI.frames.leftAnchor:SetSize(w, h)
+    SnugUI.frames.leftAnchor:EnableMouse(true)
+    SnugUI.frames.leftAnchor:SetMouseClickEnabled(false)
 end
 
 local function updateAnchors()
     -- grabs settings, can add defaults
-    local w = tonumber(zui.settings.anchorWidth)-- or 420
-    local h = tonumber(zui.settings.anchorHeight)-- or 200
+    local w = tonumber(SnugUI.settings.anchors.width)-- or 420
+    local h = tonumber(SnugUI.settings.anchors.height)-- or 200
 
     -- Helper to update one anchor
     local function resize(anchor, point, relPoint, x, y)
@@ -77,29 +77,29 @@ local function updateAnchors()
     end
 
     -- Apply to left & right
-    resize(zui.frames.leftAnchor,  "BOTTOMLEFT",  "BOTTOMLEFT",  1,  1)
-    resize(zui.frames.rightAnchor, "BOTTOMRIGHT", "BOTTOMRIGHT", -1,  1)
+    resize(SnugUI.frames.leftAnchor,  "BOTTOMLEFT",  "BOTTOMLEFT",  1,  1)
+    resize(SnugUI.frames.rightAnchor, "BOTTOMRIGHT", "BOTTOMRIGHT", -1,  1)
 end
 
 ---<=================================================================================>---<<2.2 Settings Frames and Title
 ---<======================================================[Creates main settings window, title, and  left/right panels.]
-zui.frames.BG = CreateFrame("Frame", "ZUI Settings", UIParent, "BackdropTemplate")
-zui.frames.BG:SetSize(690, 420)
-zui.frames.BG:SetPoint("CENTER")
-zui.frames.BG:SetBackdrop({ bgFile = "Interface/Tooltips/UI-Tooltip-Background" })
-zui.frames.BG:SetBackdropColor(0, 0, 0, 0.6)
-zui.frames.BG:SetMovable(true)
-zui.frames.BG:EnableMouse(true)
-zui.frames.BG:RegisterForDrag("LeftButton")
-zui.frames.BG:SetScript("OnDragStart", zui.frames.BG.StartMoving)
-zui.frames.BG:SetScript("OnDragStop", zui.frames.BG.StopMovingOrSizing)
-zui.frames.BG:Hide()
+SnugUI.frames.BG = CreateFrame("Frame", "SnugUI Settings", UIParent, "BackdropTemplate")
+SnugUI.frames.BG:SetSize(690, 420)
+SnugUI.frames.BG:SetPoint("CENTER")
+SnugUI.frames.BG:SetBackdrop({ bgFile = "Interface/Tooltips/UI-Tooltip-Background" })
+SnugUI.frames.BG:SetBackdropColor(0, 0, 0, 0.6)
+SnugUI.frames.BG:SetMovable(true)
+SnugUI.frames.BG:EnableMouse(true)
+SnugUI.frames.BG:RegisterForDrag("LeftButton")
+SnugUI.frames.BG:SetScript("OnDragStart", SnugUI.frames.BG.StartMoving)
+SnugUI.frames.BG:SetScript("OnDragStop", SnugUI.frames.BG.StopMovingOrSizing)
+SnugUI.frames.BG:Hide()
+table.insert(UISpecialFrames, "SnugUI Settings")
 
-
-zui.frames.leftBG = CreateFrame("Frame", nil, zui.frames.BG, "BackdropTemplate")
-zui.frames.leftBG:SetSize(200, 358)
-zui.frames.leftBG:SetPoint("TOPLEFT", zui.frames.BG, "TOPLEFT", 8, -20)
-zui.frames.leftBG:SetBackdrop({
+SnugUI.frames.leftBG = CreateFrame("Frame", nil, SnugUI.frames.BG, "BackdropTemplate")
+SnugUI.frames.leftBG:SetSize(200, 358)
+SnugUI.frames.leftBG:SetPoint("TOPLEFT", SnugUI.frames.BG, "TOPLEFT", 8, -20)
+SnugUI.frames.leftBG:SetBackdrop({
     bgFile = "Interface/Tooltips/UI-Tooltip-Background",
     edgeFile = "Interface/DialogFrame/UI-DialogBox-Border",
     tile = true,
@@ -107,12 +107,12 @@ zui.frames.leftBG:SetBackdrop({
     edgeSize = 16,
     insets = { left = 4, right = 4, top = 4, bottom = 4 }
 })
-zui.frames.leftBG:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
+SnugUI.frames.leftBG:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
 
-zui.frames.rightBG = CreateFrame("Frame", nil, zui.frames.BG, "BackdropTemplate")
-zui.frames.rightBG:SetSize(472, 358)
-zui.frames.rightBG:SetPoint("TOPRIGHT", zui.frames.BG, "TOPRIGHT", -8, -20)
-zui.frames.rightBG:SetBackdrop({
+SnugUI.frames.rightBG = CreateFrame("Frame", nil, SnugUI.frames.BG, "BackdropTemplate")
+SnugUI.frames.rightBG:SetSize(472, 358)
+SnugUI.frames.rightBG:SetPoint("TOPRIGHT", SnugUI.frames.BG, "TOPRIGHT", -8, -20)
+SnugUI.frames.rightBG:SetBackdrop({
     bgFile = "Interface/Tooltips/UI-Tooltip-Background",
     edgeFile = "Interface/DialogFrame/UI-DialogBox-Border",
     tile = true,
@@ -120,12 +120,12 @@ zui.frames.rightBG:SetBackdrop({
     edgeSize = 16,
     insets = { left = 4, right = 4, top = 4, bottom = 4 }
 })
-zui.frames.rightBG:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
+SnugUI.frames.rightBG:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
 
 -- Title Frames
-local titleFrame = CreateFrame("Frame", nil, zui.frames.BG, "BackdropTemplate")
+local titleFrame = CreateFrame("Frame", nil, SnugUI.frames.BG, "BackdropTemplate")
 titleFrame:SetSize(100, 36)
-titleFrame:SetPoint("TOP", zui.frames.BG, "TOP", 0, 18)
+titleFrame:SetPoint("TOP", SnugUI.frames.BG, "TOP", 0, 18)
 local texMid = titleFrame:CreateTexture(nil, "OVERLAY")
 texMid:SetTexture("interface/framegeneral/uiframediamondmetalheader2x")
 texMid:SetTexCoord(0, 0.5, 0.00390625, 0.30859375)
@@ -148,37 +148,45 @@ label:SetPoint("CENTER")
 label:SetText("SnugUI Settings")
 
 ---<=================================================================================>---<<2.3 Pre-declaration of Panels
-zui.panels.about = CreateFrame("Frame", nil, zui.frames.rightBG)
-zui.panels.about:SetAllPoints()
-zui.panels.about:Hide()
+SnugUI.panels.about = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.about:SetAllPoints()
+SnugUI.panels.about:Hide()
 
-zui.panels.general = CreateFrame("Frame", nil, zui.frames.rightBG)
-zui.panels.general:SetAllPoints()
-zui.panels.general:Hide()
+SnugUI.panels.general = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.general:SetAllPoints()
+SnugUI.panels.general:Hide()
 
-zui.panels.chat = CreateFrame("Frame", nil, zui.frames.rightBG)
-zui.panels.chat:SetAllPoints()
-zui.panels.chat:Hide()
+SnugUI.panels.chat = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.chat:SetAllPoints()
+SnugUI.panels.chat:Hide()
 
-zui.panels.profiles = CreateFrame("Frame", nil, zui.frames.rightBG)
-zui.panels.profiles:SetAllPoints()
-zui.panels.profiles:Hide()
+SnugUI.panels.profiles = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.profiles:SetAllPoints()
+SnugUI.panels.profiles:Hide()
 
-zui.panels.details = CreateFrame("Frame", nil, zui.frames.rightBG)
-zui.panels.details:SetAllPoints()
-zui.panels.details:Hide()
+SnugUI.panels.details = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.details:SetAllPoints()
+SnugUI.panels.details:Hide()
 
-zui.panels.prat = CreateFrame("Frame", nil, zui.frames.rightBG)
-zui.panels.prat:SetAllPoints()
-zui.panels.prat:Hide()
+SnugUI.panels.prat = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.prat:SetAllPoints()
+SnugUI.panels.prat:Hide()
 
-zui.panels.masque = CreateFrame("Frame", nil, zui.frames.rightBG)
-zui.panels.masque:SetAllPoints()
-zui.panels.masque:Hide()
+SnugUI.panels.masque = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.masque:SetAllPoints()
+SnugUI.panels.masque:Hide()
+
+SnugUI.panels.qol = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.qol:SetAllPoints()
+SnugUI.panels.qol:Hide()
+
+SnugUI.panels.minimap = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.minimap:SetAllPoints()
+SnugUI.panels.minimap:Hide()
 
 ---<===========================================================================================>---<<2.4 Sidebar Buttons
 ---<===========================================[Includes logic for highlight states and corresponding panel visibility.]
-local sidebarLabels = { "About", "General", "Profiles" }
+local sidebarLabels = { "About", "General", "Minimap", "QOL", "Profiles" }
 local subLabels     = { "Details!", "WeakAuras" }
 
 local sidebarButtons = {}
@@ -187,13 +195,15 @@ local subVisible     = false
 
 -- Map of panel names to their frames
 local panelMap = {
-    About     = zui.panels.about,
-    General   = zui.panels.general,
-    Chat      = zui.panels.chat,
-    Profiles  = zui.panels.profiles,
-    ["Details!"] = zui.panels.details,
-    --["Prat 3.0"] = zui.panels.prat,
-    WeakAuras    = zui.panels.masque,
+    About     = SnugUI.panels.about,
+    General   = SnugUI.panels.general,
+    Chat      = SnugUI.panels.chat,
+    QOL       = SnugUI.panels.qol,
+    Minimap   = SnugUI.panels.minimap,
+    Profiles  = SnugUI.panels.profiles,
+    ["Details!"] = SnugUI.panels.details,
+    --["Prat 3.0"] = SnugUI.panels.prat,
+    WeakAuras    = SnugUI.panels.masque,
 }
 
 -- Utility to hide highlights on a set of buttons
@@ -234,7 +244,7 @@ local yOffset = startY
 
 -- Create main sidebar buttons
 for _, label in ipairs(sidebarLabels) do
-    local btn = CreateFrame("Button", nil, zui.frames.leftBG)
+    local btn = CreateFrame("Button", nil, SnugUI.frames.leftBG)
     btn:SetSize(180, 24)
     btn:SetPoint("TOPLEFT", 10, yOffset)
 
@@ -287,7 +297,7 @@ end
 
 -- Create sub-buttons under 'Profiles'
 for _, label in ipairs(subLabels) do
-    local btn = CreateFrame("Button", nil, zui.frames.leftBG)
+    local btn = CreateFrame("Button", nil, SnugUI.frames.leftBG)
     btn:SetSize(160, 22)
     btn:SetPoint("TOPLEFT", 20, yOffset)
     btn:Hide()
@@ -318,20 +328,20 @@ for _, label in ipairs(subLabels) do
     yOffset = yOffset + spacing
 end
 
-zui.buttons.apply = CreateFrame("Button", nil, zui.frames.BG, "UIPanelButtonTemplate")
-zui.buttons.apply:SetSize(100, 24)
-zui.buttons.apply:SetPoint("BOTTOMLEFT", 10, 10)
-zui.buttons.apply:SetText("Apply")
+SnugUI.buttons.apply = CreateFrame("Button", nil, SnugUI.frames.BG, "UIPanelButtonTemplate")
+SnugUI.buttons.apply:SetSize(100, 24)
+SnugUI.buttons.apply:SetPoint("BOTTOMLEFT", 10, 10)
+SnugUI.buttons.apply:SetText("Apply")
 
-zui.buttons.reload = CreateFrame("Button", nil, zui.frames.BG, "UIPanelButtonTemplate")
-zui.buttons.reload:SetSize(100, 24)
-zui.buttons.reload:SetPoint("LEFT", zui.buttons.apply, "RIGHT", 10, 0)
-zui.buttons.reload:SetText("Reload UI")
+SnugUI.buttons.reload = CreateFrame("Button", nil, SnugUI.frames.BG, "UIPanelButtonTemplate")
+SnugUI.buttons.reload:SetSize(100, 24)
+SnugUI.buttons.reload:SetPoint("LEFT", SnugUI.buttons.apply, "RIGHT", 10, 0)
+SnugUI.buttons.reload:SetText("Reload UI")
 
-zui.buttons.close = CreateFrame("Button", nil, zui.frames.BG, "UIPanelButtonTemplate")
-zui.buttons.close:SetSize(100, 24)
-zui.buttons.close:SetPoint("BOTTOMRIGHT", -10, 10)
-zui.buttons.close:SetText("Close")
+SnugUI.buttons.close = CreateFrame("Button", nil, SnugUI.frames.BG, "UIPanelButtonTemplate")
+SnugUI.buttons.close:SetSize(100, 24)
+SnugUI.buttons.close:SetPoint("BOTTOMRIGHT", -10, 10)
+SnugUI.buttons.close:SetText("Close")
 
 ---<===================================================================================================>---<<2.5 Borders
 -- Universal border piece creator
@@ -399,7 +409,7 @@ local borderConfig = {
     },
 }
 for _, cfg in pairs(borderConfig) do
-    cfg.parent = zui.frames.BG
+    cfg.parent = SnugUI.frames.BG
     AddBorderPiece(cfg)
 end
 
@@ -434,36 +444,36 @@ local cornerConfig = {
     },
 }
 for _, cfg in pairs(cornerConfig) do
-    cfg.parent = zui.frames.BG
+    cfg.parent = SnugUI.frames.BG
     AddCornerPiece(cfg)
 end
 ---<====================================================================================================>---<<2.6 Labels
-local l = zui.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+local l = SnugUI.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 l:SetFont("Fonts\\FRIZQT__.TTF", 16, "")
 l:SetPoint("TOPLEFT", 16, -16)
 l:SetText("Anchor Settings")
 
---local l = zui.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+--local l = SnugUI.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 --l:SetFont("Fonts\\FRIZQT__.TTF", 16, "")
 --l:SetPoint("TOP", 0, -116)
 --l:SetText("Anchor Content")
 
-local l = zui.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+local l = SnugUI.panels.general:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 l:SetFont("Fonts\\FRIZQT__.TTF", 16, "")
 l:SetPoint("TOPLEFT", 16, -124)
 l:SetText("Styles")
 
-local divider = zui.panels.general:CreateTexture(nil, "ARTWORK")
+local divider = SnugUI.panels.general:CreateTexture(nil, "ARTWORK")
 divider:SetColorTexture(1, 1, 1, 0.2)
-divider:SetSize(zui.panels.general:GetWidth() - 32, 2)
-divider:SetPoint("TOP", zui.panels.general, "TOP", 0, -108)
+divider:SetSize(SnugUI.panels.general:GetWidth() - 32, 2)
+divider:SetPoint("TOP", SnugUI.panels.general, "TOP", 0, -108)
 
 
 ---<===========================================================================================================>---<<AUX
-zui.loginTrigger(function()
+SnugUI.loginTrigger(function()
     -- Initialization
     createAnchors()
 
     -- Commit Registry
-    table.insert(zui.commitRegistry, updateAnchors)
+    table.insert(SnugUI.commitRegistry, updateAnchors)
 end)

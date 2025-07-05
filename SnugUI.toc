@@ -2,8 +2,8 @@
 ## Title: |cff66ccffSnugUI|r
 ## Notes: A clean, focused UI enhancement addon for World of Warcraft.
 ## Author: Snugglelumps
-## Version: 1.0
-## SavedVariables: ZUISettings
+## Version: 1.1
+## SavedVariables: SnugUISettings
 
 bootstrap/init.lua
 bootstrap/frames.lua
@@ -13,6 +13,7 @@ modules/blizzard.lua
 modules/details.lua
 modules/chat.lua
 modules/tabwords.lua
+modules/qol.lua
 
 resources/profiles.lua
 main.lua
