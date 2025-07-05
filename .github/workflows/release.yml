@@ -3,7 +3,7 @@ name: Package and Release SnugUI to CurseForge
 on:
   push:
     tags:
-      - "v*"
+      - "*"
 
 jobs:
   release:
@@ -22,6 +22,6 @@ jobs:
       - name: Upload to CurseForge
         uses: LIMGitHub/curseforge-uploader@v1
         with:
-          token: ${{ 6a9ce39a-810e-40e0-8a87-572ed98243a6 }}
+          token: ${{ secrets.CF_API_TOKEN }}
           project-id: 1297363
           file-path: ./releases/SnugUI-*.zip
