@@ -3,7 +3,7 @@ name: Package and Release SnugUI to CurseForge
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
   release:
@@ -26,3 +26,11 @@ jobs:
           project_id: "1297363"
           game_endpoint: "wow"
           file_path: "SnugUI-*.zip"
+
+      - name: Debug: list workspace files
+        run: |
+          echo "—— workspace root ——"
+          ls -lh .
+          echo ""
+          echo "—— .release directory ——"
+          ls -lh .release || echo ".release not present"
