@@ -1,23 +1,62 @@
 local _, SnugUI = ...
 
 local questButtonParent = CreateFrame("Frame", "QuestButtonFrame", UIParent, "BackdropTemplate")
-questButtonParent:SetSize(40, 40)
+questButtonParent:SetSize(44, 44)
 questButtonParent:SetPoint("CENTER")
 questButtonParent:SetFrameStrata("LOW")
 questButtonParent:SetMovable(true)
 questButtonParent:SetUserPlaced(true)
-questButtonParent:Hide()
+--questButtonParent:Hide()
+questButtonParent:SetBackdrop({
+    bgFile = "Interface/Tooltips/UI-Tooltip-Background", -- solid color texture
+    tile = true,
+    tileSize = 16,
+})
+questButtonParent:SetBackdropColor(0, 0, 0, 0.5) -- black, 50% opacity
+
 SnugUI.frames.questButtonParent = questButtonParent
 
-local function updateQuestItemButtons()
+local function initQuestItemFrame()
+    local frameNames = {}
+    for i = 1, 10 do
+        frameNames[i] = "WatchFrameItem" .. i
+    end
+
+    local function tryHookQuestButtons()
+        for _, frameName in ipairs(frameNames) do
+            local button = _G[frameName]
+            if button and not button.__SnugUI_Hooked then
+                hooksecurefunc(button, "SetPoint", function()
+                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
+                        SnugUI.functions.updateQuestItemButtons()
+                    end
+                end)
+                button.__SnugUI_Hooked = true
+            end
+        end
+    end
+    tryHookQuestButtons()
+
+    local eventFrame = CreateFrame("Frame")
+    eventFrame:RegisterEvent("QUEST_LOG_UPDATE")
+    eventFrame:SetScript("OnEvent", function()
+        SnugUI.functions.updateQuestItemButtons()
+    end)
+    --had a "SetParent" hook, add back if needed.
+end
+
+local isUpdatingQuestButtons = false
+function SnugUI.functions.updateQuestItemButtons()
+    if isUpdatingQuestButtons then return end
+    isUpdatingQuestButtons = true
     local anchored = {}
     local firstButton = nil
 
     for i = 1, 10 do
         local button = _G["WatchFrameItem"..i]
         if not button then break end
-        if button:IsShown() and button:GetParent() then
-            button:SetMovable(true)
+
+        if button:IsShown() then
             button:EnableMouse(true)
             button:RegisterForDrag("LeftButton")
             button:SetScript("OnDragStart", function()
@@ -36,7 +75,6 @@ local function updateQuestItemButtons()
             else
                 button:SetPoint("LEFT", anchored[#anchored], "RIGHT", 5, 0)
             end
-
             table.insert(anchored, button)
         end
     end
@@ -46,21 +84,18 @@ local function updateQuestItemButtons()
 
         if not firstButton.keyLabel then
             firstButton.keyLabel = firstButton:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-            firstButton.keyLabel:SetPoint("TOPRIGHT", firstButton, "TOPRIGHT", -2, -2)
+            firstButton.keyLabel:SetPoint("TOPLEFT", firstButton, "TOPLEFT", 2, -2)
             firstButton.keyLabel:SetTextColor(1, 1, 1)
         end
 
         firstButton.keyLabel:SetText(SnugUI.settings.qol.questHotkey:upper())
     end
+    isUpdatingQuestButtons = false
 end
 
 SnugUI.loginTrigger(function()
     if not SnugUI.settings.qol.questButton then return end
-    C_Timer.After(4, updateQuestItemButtons) -- MONSTER delay, i hate it but its needed. blizzard is super slow creating the watchframe, and we change its position in minimap.lua. it seems like there is an amount of time after the frame is created/moved that it is not ready. essentially we wait for blizz, wait 2 seconds, move it, wait another 2 seconds.
-    table.insert(SnugUI.commitRegistry, updateQuestItemButtons)
-    local f = CreateFrame("Frame")
-    f:RegisterEvent("QUEST_LOG_UPDATE")
-    f:SetScript("OnEvent", function()
-        updateQuestItemButtons()
-    end)
+    initQuestItemFrame()
+    --C_Timer.After(4, SnugUI.functions.updateQuestItemButtons) -- MONSTER delay, i hate it but its needed. blizzard is super slow creating the watchframe, and we change its position in minimap.lua. it seems like there is an amount of time after the frame is created/moved that it is not ready. essentially we wait for blizz, wait 2 seconds, move it, wait another 2 seconds.
+    --table.insert(SnugUI.commitRegistry, SnugUI.functions.updateQuestItemButtons)
 end)

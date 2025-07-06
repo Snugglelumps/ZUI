@@ -35,6 +35,6 @@ jobs:
         with:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: "1297363"
-          game_endpoint: "wow_classic_mists_of_pandaria"
-          game_versions: "5.5.0"
+          game_endpoint: "wow"
+          game_versions: "50500"
           file_path: ".release/SnugUI.zip"
