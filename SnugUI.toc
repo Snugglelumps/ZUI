@@ -1,4 +1,3 @@
-## Interface:          11307
 ## Interface-Cata:     40400
 ## Interface-Mists:    50500
 ## Title: |cff66ccffSnugUI|r

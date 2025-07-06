@@ -34,6 +34,7 @@ ___
 * New table structure for namespace settings
 * Added QOL panel and new quest item bar feature
 
-## 1.2 
+## 1.23
 * Rebuilt minimap
 * Ready for GitHub Actions
+* Quest item bar now properly hooks all Blizzard functions that would reparent those frames

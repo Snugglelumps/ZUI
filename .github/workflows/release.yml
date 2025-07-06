@@ -35,6 +35,7 @@ jobs:
         with:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: "1297363"
-          game_endpoint: "wow"
-          game_versions: "50500"
+          game_versions: "5.5.0"
+          game_version_ids: "12975"
           file_path: ".release/SnugUI.zip"
+          release_type: release
