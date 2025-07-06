@@ -13,6 +13,17 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0    # need full history to get tags
+
+      - name: Extract version from tag
+        id: extract_version
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Update TOC version
+        run: |
+          sed -i "s/^## Version:.*/## Version: $VERSION/" ./SnugUI.toc
 
       - name: Package Addon (MoP Classic)
         uses: BigWigsMods/packager@v2
@@ -24,5 +35,6 @@ jobs:
         with:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: "1297363"
-          game_endpoint: "wow"
+          game_endpoint: "wow_classic_mists_of_pandaria"
+          game_versions: "5.5.0"
           file_path: ".release/SnugUI.zip"

@@ -17,7 +17,7 @@
 │   │   ├── lockTracker
 │   │   ├── hideWorldMapButton
 │   │   ├── disableModule
-│   │   └──
+│   │   └── styleNum
 │   ├── qol
 │   │   ├── questButton 
 │   │   └── questHotkey

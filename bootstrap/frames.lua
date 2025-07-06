@@ -468,6 +468,11 @@ divider:SetColorTexture(1, 1, 1, 0.2)
 divider:SetSize(SnugUI.panels.general:GetWidth() - 32, 2)
 divider:SetPoint("TOP", SnugUI.panels.general, "TOP", 0, -108)
 
+local divider = SnugUI.panels.minimap:CreateTexture(nil, "ARTWORK")
+divider:SetColorTexture(1, 1, 1, 0.2)
+divider:SetSize(SnugUI.panels.minimap:GetWidth() - 32, 2)
+divider:SetPoint("TOP", SnugUI.panels.minimap, "TOP", 0, -68)
+
 
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()

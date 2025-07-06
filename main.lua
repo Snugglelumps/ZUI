@@ -187,7 +187,7 @@ local function initMinimapSettingsPanel2()
 
     -- Lock Tracker Checkbox
     local lockLabel = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    lockLabel:SetPoint("TOPLEFT", 16, -16)
+    lockLabel:SetPoint("TOPLEFT", 24, -110)
     lockLabel:SetText("Lock Tracker")
 
     local lockCheckbox = CreateFrame("CheckButton", nil, panel, "ChatConfigCheckButtonTemplate")
@@ -198,14 +198,9 @@ local function initMinimapSettingsPanel2()
         SnugUI.functions.reloadUIRequest()
     end)
 
-    -- Hide World Map Button Checkbox
-    local hideLabel = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    hideLabel:SetPoint("TOPLEFT", lockLabel, "BOTTOMLEFT", 0, -16)
-    hideLabel:SetText("Hide World Map Button")
-
     -- Scale Slider
     local sliderLabel = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    sliderLabel:SetPoint("TOPLEFT", hideLabel, "BOTTOMLEFT", 0, -30)
+    sliderLabel:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -100, -90)
     sliderLabel:SetText("Minimap Scale")
 
     local scaleSlider = CreateFrame("Slider", nil, panel, "OptionsSliderTemplate")
@@ -221,6 +216,29 @@ local function initMinimapSettingsPanel2()
         SnugUI.settings.minimap.scale = value
         SnugUI.functions.applyMinimapScale()
     end)
+    local styleSlider = CreateFrame("Slider", "SnugUI_MinimapScaleSlider", SnugUI.panels.minimap, "OptionsSliderTemplate")
+    styleSlider.Low :SetText("SnugUI")
+    styleSlider.High:SetText("Blizzard")
+    styleSlider:SetMinMaxValues(0, 1)
+    styleSlider:SetValueStep(1)
+    styleSlider:SetObeyStepOnDrag(true)
+    styleSlider:SetWidth(200)
+    styleSlider:SetHeight(20)
+    styleSlider:SetPoint("TOP", SnugUI.panels.minimap, "TOP", 0, -30)
+    if SnugUI.settings.minimap.style == "SnugUI" then styleSlider:SetValue(0) else styleSlider:SetValue(1) end
+    styleSlider:HookScript("OnMouseUp", function(self)
+        local value = self:GetValue()
+        if value == 0 then
+            SnugUI.settings.minimap.style = "SnugUI"
+        else
+            SnugUI.settings.minimap.style = "Blizzard"
+        end
+    end)
+
+    -- Label above the thumb
+    local label = _G[styleSlider:GetName() .. "Text"]
+    label:SetText("Minimap Style")
+    label:SetJustifyH("LEFT")
 end
 
 
@@ -490,4 +508,5 @@ SnugUI.loginTrigger(function()
     createQuestButton()
     createQuestHotkey()
     initMinimapSettingsPanel2()
+
 end)
