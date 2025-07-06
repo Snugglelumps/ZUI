@@ -26,7 +26,6 @@ jobs:
           project_id: "1297363"
           game_endpoint: "wow"
           file_path: "SnugUI-*.zip"
-
       - name: Debug: list workspace files
         run: |
           echo "—— workspace root ——"
