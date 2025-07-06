@@ -19,17 +19,7 @@ jobs:
         with:
           args: -g mists -n "SnugUI"
 
-      - name: Upload to CurseForge
-        uses: itsmeow/curseforge-upload@v3
-        with:
-          token: ${{ secrets.CF_API_TOKEN }}
-          project_id: "1297363"
-          game_endpoint: "wow"
-          file_path: "SnugUI-*.zip"
-      - name: Debug: list workspace files
+      - name: "Debug: list all ZIPs"
         run: |
-          echo "—— workspace root ——"
-          ls -lh .
-          echo ""
-          echo "—— .release directory ——"
-          ls -lh .release || echo ".release not present"
+          echo "All ZIPs in workspace root:"
+          ls -1 *.zip || echo "  (none found)"
