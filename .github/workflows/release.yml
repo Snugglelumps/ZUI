@@ -17,7 +17,7 @@ jobs:
       - name: Package Addon (MoP Classic)
         uses: BigWigsMods/packager@v2
         with:
-          args: -g mists -n "SnugUI"
+          args: -g mists -n "SnugUI" -r .
 
       - name: Upload to CurseForge
         uses: itsmeow/curseforge-upload@v3
@@ -25,4 +25,4 @@ jobs:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: "1297363"
           game_endpoint: "wow"
-          file_path: ".release/SnugUI-*.zip"
+          file_path: "SnugUI.zip"
