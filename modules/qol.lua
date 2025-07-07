@@ -6,13 +6,6 @@ questButtonParent:SetPoint("CENTER")
 questButtonParent:SetFrameStrata("LOW")
 questButtonParent:SetMovable(true)
 questButtonParent:SetUserPlaced(true)
---questButtonParent:Hide()
-questButtonParent:SetBackdrop({
-    bgFile = "Interface/Tooltips/UI-Tooltip-Background", -- solid color texture
-    tile = true,
-    tileSize = 16,
-})
-questButtonParent:SetBackdropColor(0, 0, 0, 0.5) -- black, 50% opacity
 
 SnugUI.frames.questButtonParent = questButtonParent
 
@@ -36,12 +29,6 @@ local function initQuestItemFrame()
         end
     end
     tryHookQuestButtons()
-
-    local eventFrame = CreateFrame("Frame")
-    eventFrame:RegisterEvent("QUEST_LOG_UPDATE")
-    eventFrame:SetScript("OnEvent", function()
-        SnugUI.functions.updateQuestItemButtons()
-    end)
     --had a "SetParent" hook, add back if needed.
 end
 
@@ -96,6 +83,9 @@ end
 SnugUI.loginTrigger(function()
     if not SnugUI.settings.qol.questButton then return end
     initQuestItemFrame()
-    --C_Timer.After(4, SnugUI.functions.updateQuestItemButtons) -- MONSTER delay, i hate it but its needed. blizzard is super slow creating the watchframe, and we change its position in minimap.lua. it seems like there is an amount of time after the frame is created/moved that it is not ready. essentially we wait for blizz, wait 2 seconds, move it, wait another 2 seconds.
-    --table.insert(SnugUI.commitRegistry, SnugUI.functions.updateQuestItemButtons)
+    local eventFrame = CreateFrame("Frame")
+    eventFrame:RegisterEvent("QUEST_LOG_UPDATE")
+    eventFrame:SetScript("OnEvent", function()
+        SnugUI.functions.updateQuestItemButtons()
+    end)
 end)
