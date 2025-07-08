@@ -56,7 +56,3 @@
 └── 📄 tabwords.lua
     ├── 🛠️ Creates clickable chat tab word buttons
     └── 🛠️ Replaces default tab textures/text
-
-## Mantras
-* Single-source truth
-* Reaction only comes from action
