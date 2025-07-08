@@ -7,6 +7,6 @@ ignore:
   - .github/**
   - .gitignore
   - .pkgmeta
-  - DATA.md
+  - DATA
   - LICENSE
   - README.md
