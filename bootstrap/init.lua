@@ -59,6 +59,7 @@ local function initializeSettings()
     applyDefaults(SnugUI.settings, defaults)
 end
 
+--solitary use of ADDON_LOADED for settings initialization, if used elsewhere consider C_Timer.After in conjunction
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function(_, _, name)
@@ -76,6 +77,7 @@ function SnugUI.loginTrigger(callback)
     table.insert(loginQueue, callback)
 end
 
+--initiates a table for a queue of functions that will init on login
 local loginFrame = CreateFrame("Frame")
 loginFrame:RegisterEvent("PLAYER_LOGIN")
 loginFrame:SetScript("OnEvent", function(self)
