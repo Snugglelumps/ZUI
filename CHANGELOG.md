@@ -1,5 +1,4 @@
-# ZUI Addon Changelog  
-_Last updated: 2025-06-28_
+# ZUI Addon Changelog
 ___
 ## 0. Initial system created  
 This is the phase where I build stuff, hate it, and rebuild it. There is way too much to enumerate, here are the highlights.
@@ -34,7 +33,15 @@ ___
 * New table structure for namespace settings
 * Added QOL panel and new quest item bar feature
 
-## 1.23
+## 1.2 
 * Rebuilt minimap
 * Ready for GitHub Actions
-* Quest item bar now properly hooks all Blizzard functions that would reparent those frames
+
+## 1.2 2 -- Electric Boogaloo a.k.a 1.23
+* Rebuilt minimap, its... fine. The SnugUI map is cool, attempts at "rebuilding" the blizzard one failed. The idea here is that I can toggle between the "blizzard" map and my own without a reload. Technically it would toggle to a recreation of the blizzard map because blizzard only builds their map once, on /reload, the thing I'm trying to avoid. It fails, a lot. The issue is how blizzard parents their frames against the minimap cluster, it is NOT intuitive. Perhaps I will try again in the future, for now you're stuck with /reload to swap back to the blizzard minimap, soz.
+* actually ready for GitHub Actions, messed up the yml (or I guess yaml, thanks John) literally 20 times, well 19, the last one worked.
+
+## 1.24
+* Fixed the yml again. I... somehow lost the changes that fixed it. It worked, in Github actions, I see the parameters in the log, yet, those parameters never existed as per Github's history, or my local history. I'm new at this, clearly.
+* Annotations added for minimap.lua and init.lua
+* reformatted DATA.md to DATA as per Johns "recommendation."

@@ -85,7 +85,7 @@ end
 
 
 local previousScale
-SnugUI.functions.applyMinimapScale = function()
+SnugUI.functions.applyMinimapScale = function() -- in namespace for onvaluechanged slider in main.lua
     local currentScale = SnugUI.settings.minimap.scale
     if previousScale == currentScale then return end
         MinimapCluster:SetScale(currentScale)

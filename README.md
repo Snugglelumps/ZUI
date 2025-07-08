@@ -1,20 +1,20 @@
-or# SnugUI
+# SnugUI
 
 _A clean, focused UI enhancement addon for World of Warcraft._
 
 ## ✨ Intent
 
-> SnugUI is built on the idea that a unified, end-to-end UI should be clean, efficient, and visually cohesive — not a patchwork of mismatched styles. While many UI overhauls are impressively comprehensive, they can be overwhelming to configure and maintain. SnugUI aims to do less, better.
+> **SnugUI** is built to be clean, simple, and cohesive — nothing more. It's meant for people who just want their UI to feel unified and polished without having to dig through a hundred toggles or style overrides.
+>
+> There’s no magic behind it — just straightforward code and a focused aesthetic. SnugUI doesn't try to do everything, and that’s by design. You don’t need much to make the UI feel good: a couple of rectangles, a proper action bar, and maybe some minimap tweaks. That’s the goal.
 > 
-> The goal is simplicity with intention. SnugUI strives for minimal overhead and maximum clarity. Even as we add creature comforts like user settings, the addon will always prioritize performance and visual harmony.
+>It’s not as customizable or feature-packed as the big UI overhauls — partly because I’m not that advanced a coder, but mostly because it doesn’t need to be. The big projects aim to solve all the problems with the WoW UI, and they do. I just wanted to solve one — make things feel clean and cohesive. Hopefully, I pulled it off.
 > 
-> And while we could offer full customization, SnugUI follows a focused aesthetic — one that I personally enjoy. I know that's a little opinionated, but I hope you'll like it too.
-
 
 
 ### What SnugUI Covers
 
-**SnugUI** is intentionally minimal and only customizes a few core interface elements. It is designed to interface with:
+**SnugUI** really only covers the corners of the UI, that is the chat, a space for Details! and the minimap, I'd reccomend the following:
 
   - [****Prat 3.0****](https://www.curseforge.com/wow/addons/prat-3-0) by [sylvanaar](https://github.com/sylvanaar)
   - [****Details! Damage Meter****](https://www.curseforge.com/wow/addons/details) by [Tercioo](https://github.com/Tercioo)
@@ -48,12 +48,20 @@ Special Thanks:
   - Optional Details! import profile.
   - Responsively resizes to match the anchor.
 
-- **Chat Tab Restyling**:
-  - Choose between Blizzards old clunky tabs or the new clunky ones I wrote.
+### **Chat Enhancements**  
 
-- **Minimap Tweaks**:
-  - Recenters and declutters the minimap.
-  - Removes border fluff for a cleaner aesthetic.
+- **Snaps the chat frame** to your chosen anchor.
+- **Repositions the edit box** so it respects the anchor's size and placement.
+- **Chat Tab Restyling**:  
+  - Choose between Blizzard’s old clunky tabs… or the new clunky ones I wrote.
+
+### **Minimap Tweaks**  
+
+- **Recenters and declutters** the minimap layout.
+- **Optional style override** that matches the rest of SnugUI's aesthetic.
+- **Removes fluff** like decorative borders and extra UI noise.
+- **Locks the tracking icon** (optionally), so it remains a magnifying glass.
+- **Lets you scale it** to fit your setup.
 
 ---
 
@@ -67,40 +75,55 @@ We aim to maintain seamless integration with relevant addons across Classic expa
 
 ## 📦 Installation
 
-1. Download or clone the addon into your `Interface/AddOns/` directory.
-2. Folder must be named: `SnugUI`
-3. Use `/sui` in game to open the settings panel.
+### ✅ Easy Install (Recommended)
+You can install **SnugUI** using any addon manager that supports CurseForge:
 
-- Very shortly SnugUI and Masque_SnugUI will be on CurseForge
+- [**CurseForge**](https://www.curseforge.com/wow/addons/snugui)
+- [**WowUp**](https://wowup.io/) (make sure CurseForge is enabled as a source)
+
+Just search for `SnugUI` and click install — you’re good to go.
+
+---
+
+### 🛠 Manual Install (GitHub)
+
+1. Download or clone the repo from GitHub:  
+   [https://github.com/Snugglelumps/SnugUI](https://github.com/Snugglelumps/SnugUI)
+
+2. Place the folder in your WoW AddOns directory:
+``` 
+World of Warcraft/_retail_/Interface/AddOns/SnugUI
+```
+3. Make sure the folder is named exactly: **SnugUI**
+4. Launch the game and type */sui* to open the settings panel
+
+---
+
+### 🎨 Optional Setup: UI Profile Imports
+
+SnugUI includes pre-built profiles for a few popular addons to help keep your whole interface consistent.
+
+To access them:
+
+1. Type `/sui` in-game to open the SnugUI settings panel.
+2. Go to the **“Profiles”** tab.
+3. Copy the export strings for any supported addon.
+4. Import them directly into the addon’s profile settings.
+
+Currently supported:
+- **Details!**
+- **Shadowed Unit Frames**
+- **WeakAuras**
+
+> These are completely optional — SnugUI works fine without them, but importing the profiles can help everything look and feel more unified.
 
 ---
 
 ## 🐛 Debug Mode
 
 You can enable debug mode manually inside init.lua:
+I am constantly pruning debug code out as I learn/features are completed.
 
 ```lua
 SnugUI.settings.debug = true
  ```
- 
-## 📁 Index
-
-### 1.0: Initialization (`init.lua`)
-
-### 2.0: UI Base Frame (`frames.lua`)
-- 2.1: Anchors  
-- 2.2: Layout  
-- 2.3: Predeclare  
-- 2.4: Sidebar  
-- 2.5: Border  
-- 2.6: Labels  
-
-### 3.0: Main Logic and Panel Content (`main.lua`)
-- 3.1: Reload Indicator  
-- 3.2: Anchor Dimensions  
-- 3.3: Anchor Assignments  
-- 3.4: Minimap Settings  
-- 3.5: Chat Settings  
-- 3.6: Details! Panel  
-- 3.7: Buttons and Commands  
-- 3.8: About Page
