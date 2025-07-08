@@ -1,5 +1,4 @@
-# ZUI Addon Changelog  
-_Last updated: 2025-06-28_
+# ZUI Addon Changelog
 ___
 ## 0. Initial system created  
 This is the phase where I build stuff, hate it, and rebuild it. There is way too much to enumerate, here are the highlights.
