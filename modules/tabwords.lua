@@ -2,7 +2,15 @@ local _, SnugUI = ...
 
 local tabRects = {}
 
-local function fadeTabRectsOutCascade()
+local function fadeInAll()
+    for _, b in pairs(tabRects) do
+        if b:IsShown() then
+            UIFrameFadeIn(b, 0.15, b:GetAlpha(), 1)
+        end
+    end
+end
+
+local function fadeOutAll()
     local lop = 1
     for _, rect in pairs(tabRects) do
         if rect:IsShown() then
@@ -31,12 +39,11 @@ local function createTabWords()
         local tab = data.tab
         local rect = tabRects[data.index]
 
-        if not rect then --- trying to not reuse shit lol
+        if not rect then --- creates a new frame only if non exist
             rect = CreateFrame("Button", nil, UIParent, "BackdropTemplate")
             rect:SetBackdrop({ bgFile = "Interface/Tooltips/UI-Tooltip-Background" })
 
             local text = rect:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            text:SetFontObject(nil)
             text:SetFont("Fonts\\FRIZQT__.TTF", 16, "")
             text:SetPoint("LEFT")
             rect.text = text
@@ -50,15 +57,11 @@ local function createTabWords()
                 FCF_Tab_OnClick(chatTab, button)
             end)
             rect:SetScript("OnEnter", function(self)
-                for _, b in pairs(tabRects) do
-                    if b:IsShown() then
-                        UIFrameFadeIn(b, 0.15, b:GetAlpha(), 1)
-                    end
-                end
+                fadeInAll()
                 self.text:SetTextColor(1, 1, 1)
             end)
             rect:SetScript("OnLeave", function(self)
-                fadeTabRectsOutCascade()
+                fadeOutAll()
                 self.text:SetTextColor(1, 0.82, 0)
             end)
 
@@ -111,17 +114,16 @@ local function hideBlizzardChatTabStuff()
         end
     end
 end
-
-for _, funcName in ipairs({"FCF_DockUpdate", "FCF_OpenNewWindow", "FCF_Close"}) do
-    hooksecurefunc(funcName, createTabWords)
-end
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
     if SnugUI.settings.chat.tabStyle ~= "SnugUI" then return end
     createTabWords()
     HideGeneralDockManager()
-    C_Timer.After(6, fadeTabRectsOutCascade)
+    C_Timer.After(6, fadeOutAll)
     table.insert(SnugUI.commitRegistry, createTabWords)
+    for _, funcName in ipairs({"FCF_DockUpdate", "FCF_OpenNewWindow", "FCF_Close"}) do
+        hooksecurefunc(funcName, createTabWords)
+    end
 end)
 
 SnugUI.loginTrigger(function()
