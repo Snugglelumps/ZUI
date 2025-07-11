@@ -45,3 +45,4 @@ ___
 * Fixed the yml again. I... somehow lost the changes that fixed it. It worked, in Github actions, I see the parameters in the log, yet, those parameters never existed as per Github's history, or my local history. I'm new at this, clearly.
 * Annotations added for minimap.lua and init.lua
 * reformatted DATA.md to DATA as per Johns "recommendation."
+* Rebuild Tabwords. They are now frames, well buttons. We now just iterate over the tabs on each hook, make a frame for each tab, reuse when we can. Those frames hold all of our scripting and text.

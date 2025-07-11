@@ -11,7 +11,7 @@ local function SnugUIMinimap()
             MinimapZoomOut,
             MiniMapTrackingButtonBorder,
             MiniMapTrackingBackground,
-            MiniMapWorldMapButton, -- ill maybe make this a setting, its just such an ugly frame
+            MiniMapWorldMapButton, -- id like to make this as setting, but its just SOOOO ugly. maybe ill rebuild it.
         }
     for _, frame in ipairs(toHide) do
         if frame then frame:Hide() end
@@ -23,6 +23,10 @@ local function SnugUIMinimap()
             region:SetTexture(nil)
         end
     end
+
+    C_Timer.After(1, function()
+        MiniMapWorldMapButton:Hide() -- the only frame that needs a delay...
+    end)
 
     -- Add a 1px black border around the minimap
     Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8x8")
@@ -83,7 +87,6 @@ function applyMinimapStyle()
     end
 end
 
-
 local previousScale
 SnugUI.functions.applyMinimapScale = function() -- in namespace for onvaluechanged slider in main.lua
     local currentScale = SnugUI.settings.minimap.scale
@@ -109,10 +112,12 @@ end
 
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
-    C_Timer.After(0.1, applyMinimapStyle)
-    C_Timer.After(0.1, function()
-        SnugUI.functions.applyMinimapScale()
-    end)
+    --C_Timer.After(0, applyMinimapStyle) --probably ditch if not needed. cant recall why I delayed them at recall
+    --C_Timer.After(0, function()         --maybe before my loginqueue? idk.
+    --    SnugUI.functions.applyMinimapScale()
+    --end)
+    applyMinimapStyle()
+    SnugUI.functions.applyMinimapScale()
     table.insert(SnugUI.commitRegistry, function()
         SnugUI.functions.applyMinimapScale()
     end)

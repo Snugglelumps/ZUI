@@ -32,15 +32,6 @@ end
 
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
-    -- Initialization
     AnchorDetailsToAssignedAnchor()
-
-    -- Hooks
-    local anchor = GetAnchorTarget()
-    if anchor and not anchor.care then
-        anchor:HookScript("OnSizeChanged", AnchorDetailsToAssignedAnchor)
-        anchor.care = true
-    end
-    -- Commit Registry
     table.insert(SnugUI.commitRegistry, AnchorDetailsToAssignedAnchor)
 end)

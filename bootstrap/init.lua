@@ -68,7 +68,7 @@ f:SetScript("OnEvent", function(_, _, name)
     SnugUI.settings = SnugUISettings
     initializeSettings()
     if SnugUI.settings.reloadUI then SnugUI.settings.reloadUI = false end
-    SnugUI.settings.debug = false
+    SnugUI.settings.debug = true
 end)
 
 local loginQueue = {}

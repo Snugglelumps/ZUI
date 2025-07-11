@@ -69,17 +69,8 @@ end
 
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
-    -- Initialization
     AnchorChatToAssignedAnchor()
     HideChatButtons()
     debugFrame_GeneralDockManager()
-
-    -- Hook
-    local anchor = GetAnchorTarget()
-    if anchor and not anchor.care then
-        anchor:HookScript("OnSizeChanged", AnchorChatToAssignedAnchor)
-        anchor.care = true
-    end
-    -- Commit Registry
     table.insert(SnugUI.commitRegistry, AnchorChatToAssignedAnchor)
 end)
