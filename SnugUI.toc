@@ -3,7 +3,7 @@
 ## Title: |cff66ccffSnugUI|r
 ## Notes: A clean, focused UI enhancement addon for World of Warcraft.
 ## Author: Snugglelumps
-## Version: 1.2.1
+## Version: 1.25
 ## SavedVariables: SnugUISettings
 
 bootstrap/init.lua

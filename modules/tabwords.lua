@@ -64,8 +64,6 @@ local function createTabWords()
                 fadeOutAll()
                 self.text:SetTextColor(1, 0.82, 0)
             end)
-
-
         end
 
         rect.tabIndex = data.index
@@ -108,10 +106,10 @@ local function hideBlizzardChatTabStuff()
             if region then region:Hide() end
         end
 
-        local tabText = _G[base .. "Text"]
-        if tabText then
-            tabText:SetFont("Fonts\\FRIZQT__.TTF", 12, "NONE") -- Adjust size/style here
-        end
+        -- local tabText = _G[base .. "Text"] -- delete on next version
+        -- if tabText then
+        --     tabText:SetFont("Fonts\\FRIZQT__.TTF", 12, "NONE") -- Adjust size/style here
+        -- end
     end
 end
 ---<===========================================================================================================>---<<AUX

@@ -25,6 +25,7 @@ local function AnchorDetailsToAssignedAnchor()
     frame:ClearAllPoints()
     frame:SetPoint("TOPLEFT", targetAnchor, "TOPLEFT", 1, -1)
     frame:SetPoint("BOTTOMRIGHT", targetAnchor, "BOTTOMRIGHT", -1, 1)
+    --frame:SetClampedToScreen(false)
     if instance then
         instance:LockInstance(true)
     end

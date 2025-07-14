@@ -24,12 +24,17 @@ local function initQuestItemFrame()
                         SnugUI.functions.updateQuestItemButtons()
                     end
                 end)
+                -- Hook SetParent, I know Im missing a hook, I *think* this is it. fingers crossed
+                hooksecurefunc(button, "SetParent", function()
+                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
+                        SnugUI.functions.updateQuestItemButtons()
+                    end
+                end)
                 button.__SnugUI_Hooked = true
             end
         end
     end
     tryHookQuestButtons()
-    --had a "SetParent" hook, add back if needed.
 end
 
 local isUpdatingQuestButtons = false

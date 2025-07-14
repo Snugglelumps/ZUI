@@ -9,6 +9,7 @@ local function GetAnchorTarget()
     elseif (anchors.rightAssignment == "Chat" and SnugUI.frames.rightAnchor) then
         return SnugUI.frames.rightAnchor
     end
+    
     return nil
 end
 

@@ -27,6 +27,12 @@ local function SnugUIMinimap()
     C_Timer.After(1, function()
         MiniMapWorldMapButton:Hide() -- the only frame that needs a delay...
     end)
+    local f = CreateFrame("Frame")
+    f:RegisterEvent("PLAYER_ENTERING_WORLD")
+    f:SetScript("OnEvent", function()
+        MiniMapWorldMapButton:Hide() -- aaaan agian, this frame, Im telling you
+    end)
+
 
     -- Add a 1px black border around the minimap
     Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8x8")
@@ -112,10 +118,6 @@ end
 
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
-    --C_Timer.After(0, applyMinimapStyle) --probably ditch if not needed. cant recall why I delayed them at recall
-    --C_Timer.After(0, function()         --maybe before my loginqueue? idk.
-    --    SnugUI.functions.applyMinimapScale()
-    --end)
     applyMinimapStyle()
     SnugUI.functions.applyMinimapScale()
     table.insert(SnugUI.commitRegistry, function()
