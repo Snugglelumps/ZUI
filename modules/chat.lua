@@ -28,6 +28,7 @@ local function AnchorChatToAssignedAnchor()
         end
         ChatFrame1:SetPoint("TOPLEFT", anchor, "TOPLEFT", 2, -3)
         ChatFrame1:SetPoint("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", -2, 2)
+        ChatFrame1:SetUserPlaced(true)
 
         -- Edit box (Prat or default height offset)
         local offsetY = IsAddOnLoaded("Prat-3.0") and 2 or 6
@@ -36,8 +37,6 @@ local function AnchorChatToAssignedAnchor()
         editBox:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, offsetY)
         editBox:SetPoint("BOTTOMRIGHT", anchor, "TOPRIGHT", 0, offsetY)
         editBox:SetHeight(20)
-    elseif SnugUI.settings.debug then
-        print("SnugUI Chat: Failed to anchor. Missing anchor or ChatFrame1.")
     end
 end
 
@@ -58,20 +57,9 @@ local function HideChatButtons()
     ChatFrameMenuButton:Hide()
 end
 
-local function debugFrame_GeneralDockManager()
-    if SnugUI.settings.debug then
-        local debugBackdrop = CreateFrame("Frame", nil, GeneralDockManager, "BackdropTemplate")
-        debugBackdrop:SetAllPoints()
-        debugBackdrop:SetFrameStrata("BACKGROUND")
-        debugBackdrop:SetBackdrop({ bgFile = "Interface/Tooltips/UI-Tooltip-Background" })
-        debugBackdrop:SetBackdropColor(1, 0, 0, 0.3)
-    end
-end
-
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
     AnchorChatToAssignedAnchor()
     HideChatButtons()
-    debugFrame_GeneralDockManager()
     table.insert(SnugUI.commitRegistry, AnchorChatToAssignedAnchor)
 end)
