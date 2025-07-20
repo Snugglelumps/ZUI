@@ -30,6 +30,24 @@ local function initQuestItemFrame()
                         SnugUI.functions.updateQuestItemButtons()
                     end
                 end)
+                -- Hook Show, as Blizzard may re-show buttons on world transitions
+                hooksecurefunc(button, "Show", function()
+                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
+                        SnugUI.functions.updateQuestItemButtons()
+                    end
+                end)
+                -- Hook SetShown, as Blizzard toggles visibility on world transitions
+                hooksecurefunc(button, "SetShown", function()
+                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
+                        SnugUI.functions.updateQuestItemButtons()
+                    end
+                end)
+                -- Hook Hide, as Blizzard may hide buttons on world transitions
+                hooksecurefunc(button, "Hide", function()
+                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
+                        SnugUI.functions.updateQuestItemButtons()
+                    end
+                end)
                 button.__SnugUI_Hooked = true
             end
         end
@@ -59,6 +77,8 @@ function SnugUI.functions.updateQuestItemButtons()
             end)
             button:SetScale(1.4)
             button:SetFrameStrata("MEDIUM")
+            -- Force parent to questButtonParent every update
+            button:SetParent(SnugUI.frames.questButtonParent)
 
             button:ClearAllPoints()
             if #anchored == 0 then
@@ -68,6 +88,16 @@ function SnugUI.functions.updateQuestItemButtons()
                 button:SetPoint("LEFT", anchored[#anchored], "RIGHT", 5, 0)
             end
             table.insert(anchored, button)
+        end
+
+        -- Only show keyLabel for the first button, hide for others
+        if button.keyLabel then
+            if button == firstButton and SnugUI.settings.qol.questHotkey then
+                button.keyLabel:Show()
+                button.keyLabel:SetText(SnugUI.settings.qol.questHotkey:upper())
+            else
+                button.keyLabel:Hide()
+            end
         end
     end
 
@@ -79,7 +109,7 @@ function SnugUI.functions.updateQuestItemButtons()
             firstButton.keyLabel:SetPoint("TOPLEFT", firstButton, "TOPLEFT", 2, -2)
             firstButton.keyLabel:SetTextColor(1, 1, 1)
         end
-
+        firstButton.keyLabel:Show()
         firstButton.keyLabel:SetText(SnugUI.settings.qol.questHotkey:upper())
     end
     isUpdatingQuestButtons = false
@@ -89,7 +119,19 @@ SnugUI.loginTrigger(function()
     if not SnugUI.settings.qol.questButton then return end
     initQuestItemFrame()
     local eventFrame = CreateFrame("Frame")
-    eventFrame:RegisterEvent("QUEST_LOG_UPDATE")
+    local events = {
+        "QUEST_LOG_UPDATE",
+        "QUEST_WATCH_UPDATE",
+        "QUEST_ACCEPTED",
+        "QUEST_REMOVED",
+        "ZONE_CHANGED",
+        "ZONE_CHANGED_INDOORS",
+        "ZONE_CHANGED_NEW_AREA",
+        "PLAYER_ENTERING_WORLD",
+    }
+    for _, event in ipairs(events) do
+        eventFrame:RegisterEvent(event)
+    end
     eventFrame:SetScript("OnEvent", function()
         SnugUI.functions.updateQuestItemButtons()
     end)

@@ -27,12 +27,6 @@ local function SnugUIMinimap()
     C_Timer.After(1, function()
         MiniMapWorldMapButton:Hide() -- the only frame that needs a delay...
     end)
-    local f = CreateFrame("Frame")
-    f:RegisterEvent("PLAYER_ENTERING_WORLD")
-    f:SetScript("OnEvent", function()
-        MiniMapWorldMapButton:Hide() -- aaaan agian, this frame, Im telling you
-    end)
-
 
     -- Add a 1px black border around the minimap
     Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8x8")
@@ -94,7 +88,7 @@ function applyMinimapStyle()
 end
 
 local previousScale
-SnugUI.functions.applyMinimapScale = function() -- in namespace for onvaluechanged slider in main.lua
+SnugUI.functions.applyMinimapScale = function() -- in namespace for "OnValueChanged" slider in main.lua
     local currentScale = SnugUI.settings.minimap.scale
     if previousScale == currentScale then return end
         MinimapCluster:SetScale(currentScale)
@@ -122,6 +116,11 @@ SnugUI.loginTrigger(function()
     SnugUI.functions.applyMinimapScale()
     table.insert(SnugUI.commitRegistry, function()
         SnugUI.functions.applyMinimapScale()
+    end)
+    local f = CreateFrame("Frame")
+    f:RegisterEvent("PLAYER_ENTERING_WORLD")
+    f:SetScript("OnEvent", function()
+        MiniMapWorldMapButton:Hide() -- aaaand agian, this frame, Im telling you
     end)
 end)
 

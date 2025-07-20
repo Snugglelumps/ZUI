@@ -313,13 +313,95 @@ exportBox:SetWidth(400)
 exportBox:SetAutoFocus(false)
 exportBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
 exportBox:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
-exportBox:SetScript("OnTextChanged", function(self)
+exportBox:SetScript("OnTextChanged", function()
     scrollFrame:UpdateScrollChildRect()
 end)
 
 scrollFrame:SetScrollChild(exportBox)
 local function setDetailsExportBox()
     exportBox:SetText(Details_Profile or "No export data found.")
+end
+
+---<========================================================================================>---<< Shadowed Unit frames Panel
+local panel = SnugUI.panels.SUF
+
+local header = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+header:SetPoint("TOPLEFT", 16, -16)
+header:SetText("Go to '/SUF > General > Layout Manager > Import' to import.")
+
+local scrollFrame = CreateFrame("ScrollFrame", "SnugUISUFExportScroll", panel, "UIPanelScrollFrameTemplate")
+scrollFrame:SetPoint("TOPLEFT", 16, -48)
+scrollFrame:SetPoint("BOTTOMRIGHT", -32, 16)
+
+local bg = CreateFrame("Frame", nil, scrollFrame, "BackdropTemplate")
+bg:SetPoint("TOPLEFT", -4, 4)
+bg:SetPoint("BOTTOMRIGHT", 4, -4)
+bg:SetBackdrop({
+    bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+    edgeFile = "Interface/DialogFrame/UI-DialogBox-Border",
+    tile = true,
+    tileSize = 16,
+    edgeSize = 12,
+    insets = { left = 2, right = 2, top = 2, bottom = 2 }
+})
+bg:SetBackdropColor(0, 0, 0, 0.4)
+bg:SetBackdropBorderColor(1, 1, 1, 0.6)
+
+local exportBox = CreateFrame("EditBox", "SnugUIWAExportBox", scrollFrame)
+exportBox:SetMultiLine(true)
+exportBox:SetFontObject("GameFontHighlightSmall")
+exportBox:SetWidth(400)
+exportBox:SetAutoFocus(false)
+exportBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+exportBox:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
+exportBox:SetScript("OnTextChanged", function()
+    scrollFrame:UpdateScrollChildRect()
+end)
+
+scrollFrame:SetScrollChild(exportBox)
+local function setSUFExportBox()
+    exportBox:SetText(SUF_Profile or "No export data found.")
+end
+
+---<============================================================================================>---<< WeakAuras Panel
+local panel = SnugUI.panels.WA
+
+local header = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+header:SetPoint("TOPLEFT", 16, -16)
+header:SetText("Use the string below to import the SnugUI profile for WeakAuras")
+
+local scrollFrame = CreateFrame("ScrollFrame", "SnugUIWAExportScroll", panel, "UIPanelScrollFrameTemplate")
+scrollFrame:SetPoint("TOPLEFT", 16, -48)
+scrollFrame:SetPoint("BOTTOMRIGHT", -32, 16)
+
+local bg = CreateFrame("Frame", nil, scrollFrame, "BackdropTemplate")
+bg:SetPoint("TOPLEFT", -4, 4)
+bg:SetPoint("BOTTOMRIGHT", 4, -4)
+bg:SetBackdrop({
+    bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+    edgeFile = "Interface/DialogFrame/UI-DialogBox-Border",
+    tile = true,
+    tileSize = 16,
+    edgeSize = 12,
+    insets = { left = 2, right = 2, top = 2, bottom = 2 }
+})
+bg:SetBackdropColor(0, 0, 0, 0.4)
+bg:SetBackdropBorderColor(1, 1, 1, 0.6)
+
+local exportBox = CreateFrame("EditBox", "SnugUIWAExportBox", scrollFrame)
+exportBox:SetMultiLine(true)
+exportBox:SetFontObject("GameFontHighlightSmall")
+exportBox:SetWidth(400)
+exportBox:SetAutoFocus(false)
+exportBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+exportBox:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
+exportBox:SetScript("OnTextChanged", function()
+    scrollFrame:UpdateScrollChildRect()
+end)
+
+scrollFrame:SetScrollChild(exportBox)
+local function setWAExportBox()
+    exportBox:SetText(WeakAuras_export or "No export data found.")
 end
 ---<======================================================================================>---<<3.7 Buttons and Commands
 SLASH_SnugUI1 = "/sui"
@@ -505,6 +587,8 @@ SnugUI.loginTrigger(function()
     --initMinimapSettings()
     CreateTabSystemDropdown()
     setDetailsExportBox()
+    setSUFExportBox()
+    setWAExportBox()
     createQuestButton()
     createQuestHotkey()
     initMinimapSettingsPanel2()

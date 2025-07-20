@@ -172,9 +172,13 @@ SnugUI.panels.prat = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
 SnugUI.panels.prat:SetAllPoints()
 SnugUI.panels.prat:Hide()
 
-SnugUI.panels.masque = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
-SnugUI.panels.masque:SetAllPoints()
-SnugUI.panels.masque:Hide()
+SnugUI.panels.SUF = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.SUF:SetAllPoints()
+SnugUI.panels.SUF:Hide()
+
+SnugUI.panels.WA = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
+SnugUI.panels.WA:SetAllPoints()
+SnugUI.panels.WA:Hide()
 
 SnugUI.panels.qol = CreateFrame("Frame", nil, SnugUI.frames.rightBG)
 SnugUI.panels.qol:SetAllPoints()
@@ -187,7 +191,7 @@ SnugUI.panels.minimap:Hide()
 ---<===========================================================================================>---<<2.4 Sidebar Buttons
 ---<===========================================[Includes logic for highlight states and corresponding panel visibility.]
 local sidebarLabels = { "About", "General", "Minimap", "QOL", "Profiles" }
-local subLabels     = { "Details!", "WeakAuras" }
+local subLabels     = { "Details!", "Shadowed Unit Frames", "WeakAuras" }
 
 local sidebarButtons = {}
 local subButtons     = {}
@@ -203,7 +207,8 @@ local panelMap = {
     Profiles  = SnugUI.panels.profiles,
     ["Details!"] = SnugUI.panels.details,
     --["Prat 3.0"] = SnugUI.panels.prat,
-    WeakAuras    = SnugUI.panels.masque,
+    ["Shadowed Unit Frames"] = SnugUI.panels.SUF,
+    WeakAuras    = SnugUI.panels.WA,
 }
 
 -- Utility to hide highlights on a set of buttons
@@ -476,9 +481,6 @@ divider:SetPoint("TOP", SnugUI.panels.minimap, "TOP", 0, -68)
 
 ---<===========================================================================================================>---<<AUX
 SnugUI.loginTrigger(function()
-    -- Initialization
     createAnchors()
-
-    -- Commit Registry
     table.insert(SnugUI.commitRegistry, updateAnchors)
 end)
