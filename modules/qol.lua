@@ -9,38 +9,15 @@ questButtonParent:SetUserPlaced(true)
 
 SnugUI.frames.questButtonParent = questButtonParent
 
-local function initQuestItemFrame()
-    local frameNames = {}
-    for i = 1, 10 do
-        frameNames[i] = "WatchFrameItem" .. i
-    end
-
-    local hookFunctions = {
-        "SetPoint",
-        "SetParent",
-        "Show",
-        "SetShown",
-        "Hide",
-        "SetAttribute",
-    }
-
-    local function tryHookQuestButtons()
-        for _, frameName in ipairs(frameNames) do
-            local button = _G[frameName]
-            if button and not button.__SnugUI_Hooked then
-                for _, funcName in ipairs(hookFunctions) do
-                    hooksecurefunc(button, funcName, function()
-                        if SnugUI and SnugUI.functions.updateQuestItemButtons then
-                            SnugUI.functions.updateQuestItemButtons()
-                        end
-                    end)
-                end
-                button.__SnugUI_Hooked = true
-            end
-        end
-    end
-    tryHookQuestButtons()
-end
+-- Top-level table for button methods to hook
+local hookFunctions = {
+    "SetPoint",
+    "SetParent",
+    "Show",
+    "SetShown",
+    "Hide",
+    "SetAttribute",
+}
 
 local isUpdatingQuestButtons = false
 function SnugUI.functions.updateQuestItemButtons()
@@ -59,6 +36,18 @@ function SnugUI.functions.updateQuestItemButtons()
         local button = _G["WatchFrameItem"..i]
         if not button then break end
 
+        -- Hook button methods if not already hooked
+        if button and not button.__SnugUI_Hooked then
+            for _, funcName in ipairs(hookFunctions) do
+                hooksecurefunc(button, funcName, function()
+                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
+                        SnugUI.functions.updateQuestItemButtons()
+                    end
+                end)
+            end
+            button.__SnugUI_Hooked = true
+        end
+
         if button:IsShown() then
             button:EnableMouse(true)
             button:RegisterForDrag("LeftButton")
@@ -73,7 +62,6 @@ function SnugUI.functions.updateQuestItemButtons()
             end
             button:SetScale(1.4)
             button:SetFrameStrata("MEDIUM")
-            button:SetParent(parent)
             button:ClearAllPoints()
             if #anchored == 0 then
                 button:SetPoint("CENTER", parent, "CENTER", 0, 0)
@@ -111,22 +99,28 @@ end
 
 SnugUI.loginTrigger(function()
     if not SnugUI.settings.qol.questButton then return end
-    initQuestItemFrame()
-    local eventFrame = CreateFrame("Frame")
-    local events = {
-        "QUEST_LOG_UPDATE",
-        "QUEST_WATCH_UPDATE",
-        "QUEST_ACCEPTED",
-        "QUEST_REMOVED",
-        "ZONE_CHANGED",
-        "ZONE_CHANGED_INDOORS",
-        "ZONE_CHANGED_NEW_AREA",
-        "PLAYER_ENTERING_WORLD",
-    }
-    for _, event in ipairs(events) do
-        eventFrame:RegisterEvent(event)
-    end
-    eventFrame:SetScript("OnEvent", function()
+
+    -- Register for relevant events (redundant with WatchFrame_Update, so comment out for testing)
+    -- local eventFrame = CreateFrame("Frame")
+    -- local events = {
+    --     "QUEST_LOG_UPDATE",
+    --     "QUEST_WATCH_UPDATE",
+    --     "QUEST_ACCEPTED",
+    --     "QUEST_REMOVED",
+    --     "ZONE_CHANGED",
+    --     "ZONE_CHANGED_INDOORS",
+    --     "ZONE_CHANGED_NEW_AREA",
+    --     "PLAYER_ENTERING_WORLD",
+    -- }
+    -- for _, event in ipairs(events) do
+    --     eventFrame:RegisterEvent(event)
+    -- end
+    -- eventFrame:SetScript("OnEvent", function()
+    --     SnugUI.functions.updateQuestItemButtons()
+    -- end)
+
+    -- Hook WatchFrame_Update globally
+    hooksecurefunc("WatchFrame_Update", function()
         SnugUI.functions.updateQuestItemButtons()
     end)
 end)
