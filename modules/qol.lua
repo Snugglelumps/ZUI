@@ -15,39 +15,26 @@ local function initQuestItemFrame()
         frameNames[i] = "WatchFrameItem" .. i
     end
 
+    local hookFunctions = {
+        "SetPoint",
+        "SetParent",
+        "Show",
+        "SetShown",
+        "Hide",
+        "SetAttribute",
+    }
+
     local function tryHookQuestButtons()
         for _, frameName in ipairs(frameNames) do
             local button = _G[frameName]
             if button and not button.__SnugUI_Hooked then
-                hooksecurefunc(button, "SetPoint", function()
-                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
-                        SnugUI.functions.updateQuestItemButtons()
-                    end
-                end)
-                -- Hook SetParent, I know Im missing a hook, I *think* this is it. fingers crossed
-                hooksecurefunc(button, "SetParent", function()
-                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
-                        SnugUI.functions.updateQuestItemButtons()
-                    end
-                end)
-                -- Hook Show, as Blizzard may re-show buttons on world transitions
-                hooksecurefunc(button, "Show", function()
-                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
-                        SnugUI.functions.updateQuestItemButtons()
-                    end
-                end)
-                -- Hook SetShown, as Blizzard toggles visibility on world transitions
-                hooksecurefunc(button, "SetShown", function()
-                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
-                        SnugUI.functions.updateQuestItemButtons()
-                    end
-                end)
-                -- Hook Hide, as Blizzard may hide buttons on world transitions
-                hooksecurefunc(button, "Hide", function()
-                    if SnugUI and SnugUI.functions.updateQuestItemButtons then
-                        SnugUI.functions.updateQuestItemButtons()
-                    end
-                end)
+                for _, funcName in ipairs(hookFunctions) do
+                    hooksecurefunc(button, funcName, function()
+                        if SnugUI and SnugUI.functions.updateQuestItemButtons then
+                            SnugUI.functions.updateQuestItemButtons()
+                        end
+                    end)
+                end
                 button.__SnugUI_Hooked = true
             end
         end
@@ -59,8 +46,14 @@ local isUpdatingQuestButtons = false
 function SnugUI.functions.updateQuestItemButtons()
     if isUpdatingQuestButtons then return end
     isUpdatingQuestButtons = true
+
     local anchored = {}
     local firstButton = nil
+    local parent = SnugUI.frames.questButtonParent
+    if not parent then
+        isUpdatingQuestButtons = false
+        return
+    end
 
     for i = 1, 10 do
         local button = _G["WatchFrameItem"..i]
@@ -69,20 +62,21 @@ function SnugUI.functions.updateQuestItemButtons()
         if button:IsShown() then
             button:EnableMouse(true)
             button:RegisterForDrag("LeftButton")
-            button:SetScript("OnDragStart", function()
-                SnugUI.frames.questButtonParent:StartMoving()
-            end)
-            button:SetScript("OnDragStop", function()
-                SnugUI.frames.questButtonParent:StopMovingOrSizing()
-            end)
+            if not button.__SnugUI_DragScripts then
+                button:SetScript("OnDragStart", function()
+                    parent:StartMoving()
+                end)
+                button:SetScript("OnDragStop", function()
+                    parent:StopMovingOrSizing()
+                end)
+                button.__SnugUI_DragScripts = true
+            end
             button:SetScale(1.4)
             button:SetFrameStrata("MEDIUM")
-            -- Force parent to questButtonParent every update
-            button:SetParent(SnugUI.frames.questButtonParent)
-
+            button:SetParent(parent)
             button:ClearAllPoints()
             if #anchored == 0 then
-                button:SetPoint("CENTER", SnugUI.frames.questButtonParent, "CENTER", 0, 0)
+                button:SetPoint("CENTER", parent, "CENTER", 0, 0)
                 firstButton = button
             else
                 button:SetPoint("LEFT", anchored[#anchored], "RIGHT", 5, 0)
@@ -103,7 +97,6 @@ function SnugUI.functions.updateQuestItemButtons()
 
     if firstButton and SnugUI.settings.qol.questHotkey then
         SetOverrideBindingClick(firstButton, true, SnugUI.settings.qol.questHotkey, firstButton:GetName(), "LeftButton")
-
         if not firstButton.keyLabel then
             firstButton.keyLabel = firstButton:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
             firstButton.keyLabel:SetPoint("TOPLEFT", firstButton, "TOPLEFT", 2, -2)
@@ -112,6 +105,7 @@ function SnugUI.functions.updateQuestItemButtons()
         firstButton.keyLabel:Show()
         firstButton.keyLabel:SetText(SnugUI.settings.qol.questHotkey:upper())
     end
+
     isUpdatingQuestButtons = false
 end
 

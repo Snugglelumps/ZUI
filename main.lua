@@ -143,46 +143,7 @@ end
 ---<==========================================================================================>---<<3.4 Minimap Settings
 local minimapStyleOptions = { "SnugUI", "Blizzard" }
 
-local function initMinimapSettings()
-    local panel = SnugUI.panels.minimap
-
-    -- Create dropdown
-    local dropdown = CreateFrame("Frame", "SnugUIMinimapStyleDropdown", panel, "UIDropDownMenuTemplate")
-    dropdown:SetPoint("TOPLEFT", panel, "TOPLEFT", 160, -166)
-    UIDropDownMenu_SetWidth(dropdown, 120)
-
-    -- Create label above the dropdown
-    local label = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    label:SetPoint("BOTTOM", dropdown, "TOP", 0, 4)
-    label:SetText("Minimap Style:")
-
-    UIDropDownMenu_Initialize(dropdown, function(self, level)
-        for _, option in ipairs(minimapStyleOptions) do
-            local info = UIDropDownMenu_CreateInfo()
-            info.text = option
-            info.value = option
-            info.checked = (SnugUI.settings.minimap.style == option)
-            info.func = function(selfArg)
-                SnugUI.settings.minimap.style = selfArg.value
-                UIDropDownMenu_SetSelectedValue(dropdown, selfArg.value)
-                _G[dropdown:GetName() .. "Text"]:SetText(selfArg.value)
-                SnugUI.functions.reloadUIRequest()
-            end
-            UIDropDownMenu_AddButton(info, level)
-        end
-    end)
-
-    local value = SnugUI.settings.minimap.style
-    if not tContains(minimapStyleOptions, value) then
-        value = "SnugUI"
-        SnugUI.settings.minimap.style = value
-    end
-    UIDropDownMenu_SetSelectedValue(dropdown, value)
-    _G[dropdown:GetName() .. "Text"]:SetText(value)
-end
----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^dead soon
-
-local function initMinimapSettingsPanel2()
+local function initMinimapSettingsPanel()
     local panel = SnugUI.panels.minimap
 
     -- Lock Tracker Checkbox
@@ -240,8 +201,6 @@ local function initMinimapSettingsPanel2()
     label:SetText("Minimap Style")
     label:SetJustifyH("LEFT")
 end
-
-
 
 ---<=============================================================================================>---<<3.5 Chat Settings
 local tabOptions = { "SnugUI", "Blizzard" }
@@ -584,13 +543,11 @@ SnugUI.loginTrigger(function()
     -- Initialization
     initAnchorDimensions()
     initAnchorAssignments()
-    --initMinimapSettings()
     CreateTabSystemDropdown()
     setDetailsExportBox()
     setSUFExportBox()
     setWAExportBox()
     createQuestButton()
     createQuestHotkey()
-    initMinimapSettingsPanel2()
-
+    initMinimapSettingsPanel()
 end)
